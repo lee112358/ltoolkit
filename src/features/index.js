@@ -6,6 +6,7 @@ import { AttachmentFolder, ID as ATTACHMENT_FOLDER } from "./attachment-folder.j
 import { CanvasMouseSwap } from "./canvas-mouse-swap.js";
 import { ClearParagraphMarker } from "./clear-paragraph.js";
 import { BlockEscape, ID as BLOCK_ESCAPE } from "./block-escape.js";
+import { ID as INSERT_LINE, InsertLine } from "./insert-line.js";
 import { ID as LINE_HEIGHT, LineHeight } from "./line-height.js";
 import { ID as PROGRESSIVE_SELECT, ProgressiveSelect } from "./progressive-select.js";
 import { ID as TOGGLE_BOOKMARK, ToggleBookmark } from "./toggle-bookmark.js";
@@ -75,6 +76,13 @@ export const FEATURES = [
 		name: "切换任务列表",
 		desc: "把右键菜单「段落 → 任务列表」做成命令，可在快捷键里自定义按键。光标所在行或选中的多行在「- [ ] 内容」和普通段落之间来回切；内置的 editor:toggle-checklist-status 只负责勾选已有任务，两者互补。",
 		create: (app, plugin) => new ToggleTaskList(app, plugin),
+	},
+	{
+		id: INSERT_LINE,
+		group: "editor",
+		name: "上下插入新行",
+		desc: "Sublime 的 Cmd+Enter / Cmd+Shift+Enter：不管光标在行中间哪个位置，都在当前行的下方或上方另起一行并把光标移过去，当前行一个字都不切开。Obsidian 没有对应的内置命令——最接近的 swap-line-up/down 是搬走整行；CodeMirror 的 insertBlankLine 虽然在，但 Mod+Enter 默认绑给了「在新标签页打开链接」，而且它插的是纯空行，「向上插入」更是连命令都没有。这里会把缩进、引用前缀和列表标记带到新行上（有序列表接下一个号，任务项延续成未勾选，标题不延续），代码块里只带缩进。两条命令都要自己去快捷键里绑键。",
+		create: (app, plugin) => new InsertLine(app, plugin),
 	},
 	{
 		id: "clearParagraphMarker",

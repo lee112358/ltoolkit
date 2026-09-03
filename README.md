@@ -4,7 +4,7 @@
 
 A bundle of small editing, attachment, and appearance tweaks for [Obsidian](https://obsidian.md).
 
-Every feature is a separate toggle in one settings tab. Sixteen of the twenty-three are on out of the box — everything under Editor and Attachments, plus five appearance tweaks. The rest, including anything tied to a specific theme, start off. Features that take parameters show them indented under their own switch.
+Every feature is a separate toggle in one settings tab. Seventeen of the twenty-four are on out of the box — everything under Editor and Attachments, plus five appearance tweaks. The rest, including anything tied to a specific theme, start off. Features that take parameters show them indented under their own switch.
 
 <img src="docs/settings-en.svg" alt="The settings tab: one switch per feature, parameters indented underneath" width="720">
 
@@ -26,6 +26,8 @@ Every feature is a separate toggle in one settings tab. Sixteen of the twenty-th
 - **Esc selects the block** — Esc switches from *typing inside a block* to *this block is selected*, the way it does in Notion. Passes through when an autocomplete, menu or modal is open, stays out of the way in Vim mode, and passes through again once the block is already selected.
 
 - **Toggle task list** — The right-click *Paragraph → Task list* action as a bindable command. Flips the current line, or every selected line, between `- [ ] text` and a plain paragraph. Obsidian's built-in `editor:toggle-checklist-status` only ticks existing tasks; the two complement each other.
+
+- **Insert line above / below** — Sublime's <kbd>Cmd</kbd>+<kbd>Enter</kbd> and <kbd>Cmd</kbd>+<kbd>Shift</kbd>+<kbd>Enter</kbd>: open a new line below or above the current one and move the caret there, wherever the caret happens to sit — the current line is never split. Obsidian has no equivalent command; `swap-line-up/down` moves a whole line rather than inserting one, and CodeMirror's `insertBlankLine` is shadowed by *Open link in new tab* on <kbd>Mod</kbd>+<kbd>Enter</kbd> and only ever inserts a bare line. Indentation, quote prefixes and list markers carry over (ordered lists take the next number, tasks come back unchecked, headings do not carry); inside a code block only the indentation does. Bind both commands yourself under Hotkeys.
 
 - **Clear paragraph markers** — Strips heading hashes, list bullets, task checkboxes and indentation from the start of the current line or selection, leaving it a plain paragraph. Inline bold and code are untouched, which is where this differs from *Clear formatting*.
 
