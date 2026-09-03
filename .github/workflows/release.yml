@@ -1,0 +1,72 @@
+# 推一个版本号 tag 就发布一版。
+#
+#   git tag 1.0.3 && git push origin 1.0.3
+#
+# 之所以把发布搬进 CI，是为了拿到构建溯源存证（artifact attestation）——
+# 它靠 GitHub 签发的 OIDC 身份证明产物确实由本仓库的这个 commit 构建，
+# 本地构建的产物签不了，社区目录的自动审核会点出这一条。
+#
+# 用户可以自己验：
+#   gh attestation verify main.js --repo lee112358/ltoolkit
+
+name: Release
+
+on:
+    push:
+        tags:
+            - "[0-9]+.[0-9]+.[0-9]+"
+
+permissions:
+    contents: write # 建 release、传附件
+    id-token: write # OIDC，签发存证要用
+    attestations: write # 写入存证
+
+jobs:
+    release:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+
+            - uses: actions/setup-node@v4
+              with:
+                  node-version: 20
+                  cache: npm
+
+            - run: npm ci
+
+            # 三处版本号必须一致，对不上就别发出去害人
+            - name: Check version consistency
+              run: |
+                  tag="${GITHUB_REF_NAME}"
+                  manifest=$(node -p "require('./manifest.json').version")
+                  if [ "$tag" != "$manifest" ]; then
+                    echo "::error::tag $tag 与 manifest.json 的 $manifest 不一致"
+                    exit 1
+                  fi
+                  node -e "
+                    const v = require('./versions.json');
+                    if (!v['$tag']) {
+                      console.error('::error::versions.json 缺少 $tag 的映射');
+                      process.exit(1);
+                    }
+                  "
+
+            - run: npm run check
+
+            - run: npm run dist
+
+            # manifest.json 不是构建产物，不需要存证
+            - uses: actions/attest-build-provenance@v2
+              with:
+                  subject-path: |
+                      dist/main.js
+                      dist/styles.css
+
+            - name: Create release
+              env:
+                  GH_TOKEN: ${{ github.token }}
+              run: |
+                  gh release create "${GITHUB_REF_NAME}" \
+                    dist/main.js dist/manifest.json dist/styles.css \
+                    --title "${GITHUB_REF_NAME}" \
+                    --generate-notes

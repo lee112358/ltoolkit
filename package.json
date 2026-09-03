@@ -12,8 +12,8 @@
 		"build": "node build.mjs",
 		"dev": "node build.mjs --watch",
 		"dist": "node build.mjs --dist",
-		"format": "prettier --write \"src/**/*.{js,css}\" \"*.{js,mjs,json}\"",
-		"check": "prettier --check \"src/**/*.{js,css}\" \"*.{js,mjs,json}\""
+		"format": "prettier --write \"src/**/*.{js,css}\" \"*.{js,mjs,json}\" \".github/workflows/*.yml\"",
+		"check": "prettier --check \"src/**/*.{js,css}\" \"*.{js,mjs,json}\" \".github/workflows/*.yml\""
 	},
 	"author": "lee112358"
 }
