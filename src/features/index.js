@@ -53,6 +53,7 @@ export const FEATURES = [
 		desc: "画布里左键拖动 = 平移、滚轮 = 缩放；按住空格恢复框选与上下滚动（Figma 式）。",
 		desktopOnly: true,
 		create: (app) => new CanvasMouseSwap(app),
+		enabledByDefault: false,
 	},
 	{
 		id: PROGRESSIVE_SELECT,
@@ -195,6 +196,7 @@ export const FEATURES = [
 		desc: "实时预览里代码块的底色是逐行铺的，块的上边界就是第一行文字的上边界，顶着字。这里在起始那行上方补一条同色窄条，圆角跟着 --code-radius 走，看起来就是整块往上长了几个像素。阅读视图的代码块自带上内边距，不受影响。",
 		bodyClass: "lt-code-block-top",
 		create: (app, plugin) => new CodeBlockTop(app, plugin),
+		enabledByDefault: false,
 		options: [
 			{
 				key: "size",
@@ -212,6 +214,7 @@ export const FEATURES = [
 		desc: "在语言后面空一格写上文件名（```python ~/sshd.conf），两种视图里都把它显示在代码块左上角。实时预览下光标在代码块外面时 Obsidian 会把围栏行折叠掉，这时候由插件补上；光标一进去围栏行原样显示，就不再重复显示了。名字得从原文的围栏行里读——Obsidian 只把第一个词写进 class，后面那截在 DOM 里查不到。",
 		bodyClass: "lt-code-block-filename",
 		create: (app, plugin) => new CodeBlockFilename(app, plugin),
+		enabledByDefault: false,
 		options: [
 			{
 				key: "lang",
@@ -228,6 +231,7 @@ export const FEATURES = [
 		name: "代码块纯色背景",
 		desc: "用平整的浅灰底替换 Border 主题代码块、行内代码、引用块和表头的点阵纹理。",
 		bodyClass: "lt-standard-code-bg",
+		enabledByDefault: false,
 	},
 	{
 		id: LINE_HEIGHT,
@@ -236,6 +240,7 @@ export const FEATURES = [
 		desc: "阅读视图和编辑器的正文行高倍数。Obsidian 核心设置里没有这一项，通常得靠主题的 Style Settings；放在这里就不跟着主题走了。用的是自己的变量和更高特异度的选择器，会盖住主题的同名设置。",
 		bodyClass: "lt-line-height",
 		create: (app, plugin) => new LineHeight(app, plugin),
+		enabledByDefault: false,
 		options: [
 			{
 				key: "value",
@@ -297,6 +302,7 @@ export const FEATURES = [
 		name: "隐藏文件浏览器的标签栏",
 		desc: "侧边栏上下分栏后，装着文件浏览器的那个面板会有一条只放着一个图标的标签栏，白占一行。隐藏它把高度还给文件列表；新建/排序那一行和折叠侧边栏的按钮都保留。只在该标签组里仅有文件浏览器一个标签时生效，拖回别的面板标签栏会自动回来。",
 		bodyClass: "lt-hide-explorer-tab-header",
+		enabledByDefault: false,
 	},
 	{
 		id: "fixFolderExpand",
@@ -304,6 +310,7 @@ export const FEATURES = [
 		name: "修复文件夹展开动画",
 		desc: "Border 主题下文件树首次展开文件夹时，高度动画会先缩到一个偏小的目标再弹到实际高度。给树条目内层钉一个最小高度即可消除。",
 		bodyClass: "lt-fix-folder-expand",
+		enabledByDefault: false,
 	},
 	{
 		id: ATTACHMENT_FOLDER,

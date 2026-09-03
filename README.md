@@ -4,7 +4,7 @@
 
 A bundle of small editing, attachment, and appearance tweaks for [Obsidian](https://obsidian.md).
 
-Every feature is a separate toggle in one settings tab. Nothing is bundled together — turn on the two you want, leave the other twenty-one off. Features that take parameters show them indented under their own switch.
+Every feature is a separate toggle in one settings tab. Sixteen of the twenty-three are on out of the box — everything under Editor and Attachments, plus five appearance tweaks. The rest, including anything tied to a specific theme, start off. Features that take parameters show them indented under their own switch.
 
 <img src="docs/settings-en.svg" alt="The settings tab: one switch per feature, parameters indented underneath" width="720">
 

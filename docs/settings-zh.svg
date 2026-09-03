@@ -60,7 +60,7 @@
 <text class="opt" x="84" y="452">代码块里贴合边界</text>
 <g transform="translate(656,448)"><rect class="sw-on" x="0" y="-9" width="38" height="20" rx="10"/><circle class="knob" cx="26" cy="1" r="7"/></g>
 <line class="rail" x1="70" y1="380" x2="70" y2="455"/>
-<text class="feat" x="54" y="483">悬浮滚动条</text>
+<text class="feat" x="54" y="483">代码块顶部外扩</text>
 <g transform="translate(656,483)"><rect class="sw-off" x="0" y="-9" width="38" height="20" rx="10"/><circle class="knob" cx="12" cy="1" r="7"/></g>
 <text class="caption" x="24" y="539">一个设置页，每项功能一个开关。参数缩进显示在它自己的开关下面。</text>
 </svg>
