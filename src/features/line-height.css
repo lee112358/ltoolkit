@@ -1,0 +1,10 @@
+/* 行高由 line-height.js 写在 body 上的 --lt-line-height 决定。
+ *
+ * 作用范围和主题的做法一致：阅读视图 + 编辑器的滚动容器。选择器多带一个
+ * body.lt-line-height，特异度高过主题自己那条，所以能盖住 Border 的
+ * --line-height-customize，不必依赖样式表的加载顺序。 */
+
+body.lt-line-height .markdown-preview-view,
+body.lt-line-height .markdown-source-view.mod-cm6 .cm-scroller {
+	line-height: var(--lt-line-height, 1.6);
+}

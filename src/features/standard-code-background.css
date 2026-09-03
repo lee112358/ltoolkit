@@ -1,0 +1,27 @@
+/*
+ * 代码块纯色背景 —— 用平整的浅灰底替换 Border 主题的 4x4 点阵纹理。
+ * 由 features/index.js 里的 bodyClass "lt-standard-code-bg" 控制开关，
+ * 两个 class 的选择器权重也保证它能压过主题自己的定义。
+ */
+
+body.lt-standard-code-bg.theme-light {
+	/* 兜底：Border 里所有复用点阵纹理的组件都吃这个变量 */
+	--background-alt-light: #f6f8fa;
+
+	--inline-code-background-light: #f1f3f5;
+	--code-background-light: #f6f8fa;
+	--code-border-light: 1px solid #dfe3e8;
+	--blockquote-background-light: #f7f8fa;
+	--table-header-background-light: #f2f4f7;
+}
+
+body.lt-standard-code-bg.theme-dark {
+	/* 深色下同一套纹理的兜底 */
+	--background-alt-dark: #252a31;
+
+	--inline-code-background-dark: #292d34;
+	--code-background-dark: #22262d;
+	--code-border-dark: 1px solid #3a414b;
+	--blockquote-background-dark: #242930;
+	--table-header-background-dark: #292f37;
+}

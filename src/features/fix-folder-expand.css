@@ -1,0 +1,16 @@
+/*
+ * 修复文件夹「首次展开」的高度动画 —— 它会先跑到一个偏小的目标，再突然弹到真实高度。
+ *
+ * 成因：Obsidian 先插入空行、量一次容器高度并启动 height 过渡，之后才填入文件名；
+ * Border 主题下空行的 .tree-item-inner 没有文字就塌成 0px（8px/行 vs 实际 28px/行），
+ * 于是那次测量拿到的目标高度远小于真实值。把 inner 的高度钉在它自己的行高上即可。
+ *
+ * 由 features/index.js 里的 bodyClass "lt-fix-folder-expand" 控制开关。
+ */
+
+body.lt-fix-folder-expand
+	.workspace-leaf-content[data-type="file-explorer"]
+	.tree-item-self
+	.tree-item-inner {
+	min-height: 20px;
+}

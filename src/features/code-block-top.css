@@ -1,0 +1,32 @@
+/* 代码块顶部往上多铺的那条底色，高度取 code-block-top.js 写在 body 上的
+ * --lt-code-block-top。
+ *
+ * 用伪元素而不是 box-shadow：起始那行同时也可能是当前行，
+ * active-line.css 已经占了它的 box-shadow，两边会互相覆盖。伪元素各画各的，
+ * 谁也不碍着谁。
+ *
+ * 位置靠 bottom: 100% 顶在本行上边界之上，那块地方没有文字，
+ * 所以伪元素盖在上层也不会挡住任何东西，不用折腾 z-index。
+ * .cm-line 本身是 position: relative（Obsidian 设的），可以直接定位。
+ *
+ * 只管实时预览：阅读视图的 pre 自己有 12px 上内边距，本来就不挤。 */
+
+body.lt-code-block-top .markdown-source-view.mod-cm6 .cm-line.HyperMD-codeblock-begin-bg::before {
+	content: "";
+	position: absolute;
+	left: 0;
+	right: 0;
+	bottom: 100%;
+	height: var(--lt-code-block-top, 2px);
+	background-color: var(--code-background);
+	border-top-left-radius: var(--code-radius);
+	border-top-right-radius: var(--code-radius);
+	pointer-events: none;
+}
+
+/* 起始行自己的上圆角交给上面那条窄条去画。不抹掉的话，行的圆角会在窄条
+ * 底下留出两个小缺口 —— 窄条底边是平的，行的上边角却是圆的，接缝处透底。 */
+body.lt-code-block-top .markdown-source-view.mod-cm6 .cm-line.HyperMD-codeblock-begin-bg {
+	border-top-left-radius: 0;
+	border-top-right-radius: 0;
+}

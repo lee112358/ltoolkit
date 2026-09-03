@@ -1,0 +1,24 @@
+/* 侧边栏上下分栏之后，装着文件浏览器的那个面板自己会有一条标签栏，
+ * 上面只有一个文件夹图标，白占一行高度。
+ *
+ * DOM 层级是：
+ *   .workspace-split.mod-left-split
+ *     .workspace-tabs
+ *       .workspace-tab-header-container        ← 要隐藏的就是这一行
+ *         .workspace-tab-header-container-inner > .workspace-tab-header
+ *       .workspace-tab-container
+ *         .workspace-leaf-content[data-type="file-explorer"]
+ *           .nav-header                        ← 这是新建/排序那一行，保留
+ *
+ * 只在「这个标签组里就它一个标签」时才隐藏 —— 万一哪天把别的面板拖回同一组，
+ * 标签栏会自动回来，不会把切换入口弄丢。
+ * 折叠侧边栏的按钮在 .workspace-ribbon 里，不受影响。 */
+
+body.lt-hide-explorer-tab-header
+	.workspace-split.mod-left-split
+	.workspace-tabs:has(.workspace-leaf-content[data-type="file-explorer"]):has(
+		.workspace-tab-header-container-inner > .workspace-tab-header:only-child
+	)
+	> .workspace-tab-header-container {
+	display: none;
+}

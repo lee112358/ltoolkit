@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="553" viewBox="0 0 720 553" role="img" aria-label="一个设置页，每项功能一个开关。参数缩进显示在它自己的开关下面。">
+<style>
+  .bg { fill: #fbfbfd; }
+  .group { fill: #17151f; font: 600 14.5px system-ui, -apple-system, "PingFang SC", sans-serif; }
+  .feat  { fill: #2c2838; font: 500 13.5px system-ui, -apple-system, "PingFang SC", sans-serif; }
+  .opt   { fill: #6b6580; font: 400 12.5px system-ui, -apple-system, "PingFang SC", sans-serif; }
+  .val, .btnlabel { fill: #4a4459; font: 400 11.5px ui-monospace, "SF Mono", Menlo, monospace; }
+  .btnlabel { text-anchor: middle; fill: #ffffff; font-family: system-ui, "PingFang SC", sans-serif; }
+  .caption { fill: #8b85a0; font: 400 12px system-ui, -apple-system, "PingFang SC", sans-serif; }
+  .arrow { fill: none; stroke: #8b85a0; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+  .rail  { stroke: #c9c3dc; stroke-width: 2; }
+  .field { fill: #ffffff; stroke: #ddd9e8; }
+  .btn   { fill: #6d4aca; }
+  .sw-on { fill: #6d4aca; }
+  .sw-off { fill: #d5d1e0; }
+  .knob  { fill: #ffffff; }
+  .edge  { fill: none; stroke: #e6e3ef; }
+  @media (prefers-color-scheme: dark) {
+    .bg { fill: #14121b; }
+    .group { fill: #eae7f3; }
+    .feat { fill: #d3cfe0; }
+    .opt { fill: #948da8; }
+    .val { fill: #b5aecb; }
+    .caption { fill: #7d7691; }
+    .arrow { stroke: #7d7691; }
+    .rail { stroke: #4a4266; }
+    .field { fill: #1d1a27; stroke: #3a3450; }
+    .btn, .sw-on { fill: #8b6bea; }
+    .sw-off { fill: #3a3450; }
+    .knob { fill: #14121b; }
+    .edge { stroke: #2a2537; }
+  }
+</style>
+<rect class="bg" width="720" height="553" rx="8"/>
+<rect class="edge" x="0.5" y="0.5" width="719" height="552" rx="8"/>
+<g transform="translate(24,38)"><path class="arrow" d="M-4,0 L1,5 L6,0" transform="translate(4,-4)"/><text class="group" x="20" y="0">附件</text></g>
+<text class="feat" x="54" y="76">附件按笔记路径分目录</text>
+<g transform="translate(656,76)"><rect class="sw-on" x="0" y="-9" width="38" height="20" rx="10"/><circle class="knob" cx="26" cy="1" r="7"/></g>
+<text class="opt" x="84" y="106">附件根目录</text>
+<rect class="field" x="574" y="92" width="120" height="21" rx="4"/><text class="val" x="584" y="106">assets</text>
+<text class="opt" x="84" y="133">跟随笔记移动</text>
+<g transform="translate(656,129)"><rect class="sw-on" x="0" y="-9" width="38" height="20" rx="10"/><circle class="knob" cx="26" cy="1" r="7"/></g>
+<line class="rail" x1="70" y1="88" x2="70" y2="136"/>
+<text class="feat" x="54" y="164">清理未引用的附件</text>
+<g transform="translate(656,164)"><rect class="sw-on" x="0" y="-9" width="38" height="20" rx="10"/><circle class="knob" cx="26" cy="1" r="7"/></g>
+<text class="opt" x="84" y="194">附件文件夹</text>
+<rect class="field" x="574" y="180" width="120" height="21" rx="4"/><text class="val" x="584" y="194">assets</text>
+<text class="opt" x="84" y="221">扫描</text>
+<rect class="btn" x="574" y="207" width="120" height="21" rx="4"/><text class="btnlabel" x="634" y="221">开始扫描</text>
+<line class="rail" x1="70" y1="176" x2="70" y2="224"/>
+<g transform="translate(24,258)"><path class="arrow" d="M0,-4 L5,1 L0,6" transform="translate(4,-4)"/><text class="group" x="20" y="0">编辑器</text></g>
+<g transform="translate(24,294)"><path class="arrow" d="M0,-4 L5,1 L0,6" transform="translate(4,-4)"/><text class="group" x="20" y="0">画布</text></g>
+<g transform="translate(24,330)"><path class="arrow" d="M-4,0 L1,5 L6,0" transform="translate(4,-4)"/><text class="group" x="20" y="0">界面样式</text></g>
+<text class="feat" x="54" y="368">当前行高亮的形状</text>
+<g transform="translate(656,368)"><rect class="sw-on" x="0" y="-9" width="38" height="20" rx="10"/><circle class="knob" cx="26" cy="1" r="7"/></g>
+<text class="opt" x="84" y="398">圆角（像素）</text>
+<rect class="field" x="574" y="384" width="120" height="21" rx="4"/><text class="val" x="584" y="398">0</text>
+<text class="opt" x="84" y="425">左右外扩（像素）</text>
+<rect class="field" x="574" y="411" width="120" height="21" rx="4"/><text class="val" x="584" y="425">2</text>
+<text class="opt" x="84" y="452">代码块里贴合边界</text>
+<g transform="translate(656,448)"><rect class="sw-on" x="0" y="-9" width="38" height="20" rx="10"/><circle class="knob" cx="26" cy="1" r="7"/></g>
+<line class="rail" x1="70" y1="380" x2="70" y2="455"/>
+<text class="feat" x="54" y="483">悬浮滚动条</text>
+<g transform="translate(656,483)"><rect class="sw-off" x="0" y="-9" width="38" height="20" rx="10"/><circle class="knob" cx="12" cy="1" r="7"/></g>
+<text class="caption" x="24" y="539">一个设置页，每项功能一个开关。参数缩进显示在它自己的开关下面。</text>
+</svg>

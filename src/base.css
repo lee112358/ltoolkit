@@ -1,0 +1,133 @@
+/* 插件设置面板自身的样式，与具体功能无关，始终生效。
+ *
+ * 层级只有三层，缩进刻度只有一套（--lt-indent），每深一层就用它缩进一次：
+ *
+ *   分组标题                 ▼ 附件
+ *   └ 功能开关                  附件按笔记路径分目录        [ON]
+ *      └ 功能的参数              │ 附件根目录          [assets]
+ *                               │ 跟随笔记移动            [ON]
+ *
+ * 加新的嵌套层次时改这一个变量，整个面板一起变，不要在别处写死数值。
+ */
+
+.ltoolkit-settings {
+	--lt-indent: 1.5em;
+	--lt-rail-width: 2px;
+	--lt-rail-color: var(--background-modifier-border);
+}
+
+/* ---------- 分组 ---------- */
+
+.ltoolkit-settings .lt-group {
+	border-top: 1px solid var(--background-modifier-border);
+}
+
+.ltoolkit-settings .lt-group:first-child {
+	border-top: none;
+}
+
+.ltoolkit-settings .lt-group-summary {
+	display: flex;
+	align-items: baseline;
+	gap: 0.6em;
+	padding: 0.9em 0 0.7em;
+	cursor: pointer;
+	user-select: none;
+	list-style: none; /* 去掉浏览器默认的折叠三角，换成下面自己画的 */
+}
+
+.ltoolkit-settings .lt-group-summary::-webkit-details-marker {
+	display: none;
+}
+
+/* 自己画折叠箭头：一个只留右下两条边的方块，转 -45° 指右、45° 指下 */
+.ltoolkit-settings .lt-group-summary::before {
+	content: "";
+	flex: 0 0 auto;
+	align-self: center;
+	width: 0.4em;
+	height: 0.4em;
+	border-right: 2px solid var(--text-muted);
+	border-bottom: 2px solid var(--text-muted);
+	transform: rotate(-45deg);
+	transition: transform 120ms ease;
+}
+
+.ltoolkit-settings .lt-group[open] > .lt-group-summary::before {
+	transform: rotate(45deg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.ltoolkit-settings .lt-group-summary::before {
+		transition: none;
+	}
+}
+
+.ltoolkit-settings .lt-group-summary:hover .lt-group-name {
+	color: var(--text-accent);
+}
+
+.ltoolkit-settings .lt-group-summary:focus-visible {
+	outline: 2px solid var(--background-modifier-border-focus);
+	outline-offset: 2px;
+	border-radius: var(--radius-s);
+}
+
+.ltoolkit-settings .lt-group-name {
+	font-size: var(--font-ui-medium);
+	font-weight: var(--font-semibold);
+	color: var(--text-normal);
+}
+
+.ltoolkit-settings .lt-group-desc {
+	font-size: var(--font-ui-smaller);
+	color: var(--text-muted);
+}
+
+/* 第一级缩进：功能相对分组标题 */
+.ltoolkit-settings .lt-group-body {
+	padding-left: var(--lt-indent);
+	padding-bottom: 0.5em;
+}
+
+/* ---------- 功能 ---------- */
+
+/* 分组里第一项功能不用再画分隔线，上面的标题已经断开了 */
+.ltoolkit-settings .lt-feature:first-child .lt-feature-setting {
+	border-top: none;
+	padding-top: 0;
+}
+
+/* ---------- 功能的参数 ---------- */
+
+/* 第二级缩进：参数相对功能，外加一条竖线表示归属。
+ * 竖线画在这一层而不是每个参数行上，所以它是连续完整的一条，
+ * 不会被行与行之间的间距切断。 */
+.ltoolkit-settings .lt-sub-group {
+	margin: 0 0 0.4em var(--lt-indent);
+	padding-left: var(--lt-indent);
+	border-left: var(--lt-rail-width) solid var(--lt-rail-color);
+}
+
+.ltoolkit-settings .lt-sub-setting {
+	border-top: none;
+	padding-top: 0.5em;
+	padding-bottom: 0.5em;
+}
+
+.ltoolkit-settings .lt-sub-setting:first-child {
+	padding-top: 0.15em;
+}
+
+.ltoolkit-settings .lt-sub-setting:last-child {
+	padding-bottom: 0.15em;
+}
+
+/* 参数比功能低一级，字号也跟着降一档，避免和功能名抢注意力 */
+.ltoolkit-settings .lt-sub-setting .setting-item-name {
+	font-size: var(--font-ui-small);
+}
+
+.ltoolkit-settings .lt-sub-setting .setting-item-description {
+	font-size: var(--font-ui-smaller);
+}

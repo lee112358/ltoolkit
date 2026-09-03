@@ -1,0 +1,17 @@
+/* 各功能的样式在这里汇总，构建时会被内联成单个 styles.css。
+ * 除 base.css 外，每个文件里的选择器都必须挂在自己功能的 body class 下，
+ * 这样设置里的开关才能单独控制它。 */
+
+@import "./base.css";
+@import "./features/standard-code-background.css";
+@import "./features/fix-folder-expand.css";
+@import "./features/tab-caret-align.css";
+@import "./features/line-height.css";
+@import "./features/hide-explorer-tab-header.css";
+@import "./features/attachment-cleaner.css";
+@import "./features/sidebar-background.css";
+@import "./features/active-line.css";
+@import "./features/code-block-top.css";
+@import "./features/code-block-filename.css";
+@import "./features/float-scrollbar.css";
+@import "./features/square-tabs.css";

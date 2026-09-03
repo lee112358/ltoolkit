@@ -1,0 +1,22 @@
+/* Tab 缩进的空行：光标位置和打字后字符的落点对不上。
+ *
+ * Obsidian 自己给列表行设了 tab-size：
+ *   .cm-line.HyperMD-list-line { tab-size: var(--list-indent); }
+ * 但「只按了 Tab、还没打字」的那一行拿不到 HyperMD-list-line 这个 class ——
+ * 它的分词器要有内容才判定得出是列表续行，空行的 class 就只有 cm-line。
+ *
+ * 于是这一行退回浏览器默认的 tab-size: 4，和 Obsidian 换行缩进插件写在行上的
+ * text-indent / padding-inline-start 互相牵制，Tab 的前进宽度停在 21.3px，
+ * 而它实际渲染出来的宽度是 32px。光标就落在 span 内部；一打字，行被识别成列表
+ * 续行，字符从 32px 开始 —— 看起来就是光标先偏左、打完字往右跳十来个像素。
+ * （量出来的数：1 级空行 21.3 → 32，2 级 64、3 级 96 本来就是对的。）
+ *
+ * 把同一个 tab-size 补给「有缩进但没被识别成列表行」的行即可。代码块排除在外，
+ * 那里的 Tab 该按等宽字体自己的宽度走。
+ */
+
+body.lt-tab-caret-align
+	.markdown-source-view.mod-cm6
+	.cm-line:not(.HyperMD-list-line):not(.HyperMD-codeblock):has(> .cm-indent) {
+	tab-size: var(--list-indent);
+}

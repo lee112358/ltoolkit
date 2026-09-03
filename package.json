@@ -1,0 +1,18 @@
+{
+  "devDependencies": {
+    "esbuild": "^0.28.2",
+    "prettier": "^3.9.6"
+  },
+  "name": "ltoolkit",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "A bundle of small editing, attachment, and appearance tweaks: Notion-style progressive select, per-note attachment folders, unused-attachment cleanup, filenames on code blocks, and scroll position memory. Each feature toggles on its own.",
+  "scripts": {
+    "build": "node build.mjs",
+    "dev": "node build.mjs --watch",
+    "dist": "node build.mjs --dist",
+    "format": "prettier --write \"src/**/*.{js,css}\" \"*.{js,mjs,json}\"",
+    "check": "prettier --check \"src/**/*.{js,css}\" \"*.{js,mjs,json}\""
+  }
+}

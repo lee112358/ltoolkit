@@ -1,0 +1,72 @@
+/* 三块东西：阅读视图的文件名、阅读视图的语言标签、实时预览的文件名。
+ *
+ * 阅读视图的两个都是 code-block-filename.js 塞进 pre 里的真元素，不是伪元素：
+ * 主题给 pre::before / ::after 加东西是常见做法，用真元素就不会跟谁抢。 */
+
+/* ---------- 阅读视图：文件名 ---------- */
+
+/* pre 的第一个子元素，正常走文档流，落点天然就是内容区左上角，
+ * 不用绝对定位，也就不必给 pre 另外补内边距。
+ * pre 上的 white-space 会继承下来，长路径得自己控制换行。 */
+body.lt-code-block-filename .markdown-rendered pre > .lt-code-filename {
+	display: block;
+	margin-bottom: var(--size-4-2);
+	padding-bottom: var(--size-2-2);
+	border-bottom: 1px solid var(--background-modifier-border);
+	color: var(--text-muted);
+	font-family: var(--font-interface);
+	font-size: var(--font-ui-smaller);
+	line-height: var(--line-height-tight);
+	white-space: pre-wrap;
+	overflow-wrap: anywhere;
+	/* 是装饰不是正文：不设的话，框选整个代码块会把它一起选走 */
+	user-select: none;
+}
+
+/* 右上角有语言标签时给它留出地方，长文件名不至于钻到标签底下 */
+body.lt-code-block-filename .markdown-rendered pre:has(> .lt-code-lang) > .lt-code-filename {
+	padding-inline-end: 6em;
+}
+
+/* ---------- 阅读视图：语言标签 ---------- */
+
+/* 位置和内置的复制按钮完全一致（top/inset-inline-end 归零，margin 6px），
+ * 所以鼠标移到代码块上时把它藏起来，复制按钮正好顶上它的位置，不打架。 */
+body.lt-code-block-filename .markdown-rendered pre > .lt-code-lang {
+	position: absolute;
+	top: 0;
+	inset-inline-end: 0;
+	margin: 6px;
+	padding: 6px 8px;
+	color: var(--text-muted);
+	font-family: var(--font-interface);
+	font-size: var(--font-ui-smaller);
+	line-height: var(--line-height-tight);
+	white-space: nowrap;
+	pointer-events: none;
+	user-select: none;
+}
+
+body.lt-code-block-filename .markdown-rendered pre:hover > .lt-code-lang {
+	visibility: hidden;
+}
+
+/* ---------- 实时预览：文件名 ---------- */
+
+/* 名字挂在围栏起始行的 data-lt-filename 上（code-block-filename.js 用
+ * CodeMirror 的行装饰加的），这里用 attr() 取出来。
+ *
+ * :has(.code-block-flair) 是「围栏行被折叠了」的判据 —— Obsidian 折起围栏行
+ * 和插入那颗语言标签是同一个分支干的，光标一进代码块两者一起消失，围栏行
+ * 原样显示，名字本来就看得见，这时候这条规则自动不生效，不会重复显示。
+ *
+ * 折叠后的起始行是个空行，只装着右上角那颗标签，左边整条都空着，
+ * 伪元素直接顺着行内流排进去就在左上角，不用定位。 */
+body.lt-code-block-filename
+	.markdown-source-view.mod-cm6
+	.cm-line.HyperMD-codeblock-begin[data-lt-filename]:has(.code-block-flair)::after {
+	content: attr(data-lt-filename);
+	color: var(--text-muted);
+	font-family: var(--font-interface);
+	font-size: var(--font-ui-smaller);
+}

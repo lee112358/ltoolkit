@@ -1,0 +1,34 @@
+/* 当前行高亮的圆角和左右外扩，取 active-line.js 写在 body 上的几个变量。
+ *
+ * 左右多出来的那点底色用 box-shadow 画：两份和本行同样大小、同样圆角的
+ * 实心阴影分别往左右偏移 pad，与本行自己的底色拼起来，正好是一块宽
+ * w + 2*pad、圆角不变的矩形。
+ *
+ * 之所以不用 padding + 负 margin 那套：Obsidian 把 .cm-line 的 padding
+ * 设成 0，但代码块行另外靠 padding-inline-start 撑缩进，一改就乱；
+ * box-shadow 不参与布局，文字一个像素都不会动。
+ *
+ * 颜色沿用主题给当前行用的那个，只改形状。选择器比主题自己那条多带一个
+ * body.lt-active-line，特异度更高，不必依赖样式表的加载顺序。 */
+
+body.lt-active-line .markdown-source-view.mod-cm6 .cm-active.cm-line {
+	--lt-active-line-bg: var(--background-secondary);
+
+	background: var(--lt-active-line-bg);
+	border-radius: var(--lt-active-line-radius, 0px);
+	box-shadow:
+		calc(-1 * var(--lt-active-line-pad, 2px)) 0 0 0 var(--lt-active-line-bg),
+		var(--lt-active-line-pad, 2px) 0 0 0 var(--lt-active-line-bg);
+}
+
+/* 代码块里的行换用另一份外扩值。代码块那层底色就画在 .cm-line 自己身上
+ * （Obsidian 给它挂 HyperMD-codeblock-bg），所以外扩多出来的像素正好顶在
+ * 代码块的边界外面，看着像高亮撑破了代码块。「代码块里贴合边界」开着时
+ * active-line.js 把这份值写成 0，光标进代码块就还是原来那块严丝合缝的高亮，
+ * 圆角仍按设置走。
+ *
+ * 上面那条规则里的 var() 是在元素上就地解析的，所以这里把变量重定义一次，
+ * box-shadow 的两个偏移量就跟着一起变，不必再写一遍 box-shadow。 */
+body.lt-active-line .markdown-source-view.mod-cm6 .cm-active.cm-line.HyperMD-codeblock {
+	--lt-active-line-pad: var(--lt-active-line-pad-code, 0px);
+}

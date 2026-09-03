@@ -1,0 +1,20 @@
+/* 悬浮滚动条 —— 只留滑块，去掉轨道底色和贴着正文那条分界线。
+ *
+ * macOS 上 Obsidian 不加 styled-scrollbars 这个 class（app.js 里写死了
+ * isMacOS 就跳过），走的是 body:not(.styled-scrollbars) 那条
+ *   scrollbar-color: var(--scrollbar-thumb-bg) var(--scrollbar-bg);
+ * 也就是 Chromium 的原生滚动条 —— 一旦设了 scrollbar-color，::-webkit-scrollbar
+ * 那套伪元素就整个失效，能动的只有这两个颜色。
+ *
+ * 主题给轨道填的是 rgba(0,0,0,0.05)，那条「左边界线」不是谁写的边框，是
+ * Chromium 自己按轨道色描的一道深边。实测（轨道分别设成底色、透明、不设）
+ * 只要轨道透明，底色和那条线一起没了，滑块不受影响。
+ *
+ * 用 transparent 而不是写死 --background-primary：轨道透出的是它背后那块
+ * 底色，编辑区、左右侧边栏、明暗模式各自都自动对得上，不用分别配。
+ *
+ * 非 macOS 走 styled-scrollbars 分支，那边轨道本来就是透明的，改不改都一样。 */
+
+body.lt-float-scrollbar {
+	--scrollbar-bg: transparent;
+}

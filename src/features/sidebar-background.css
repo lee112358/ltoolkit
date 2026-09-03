@@ -1,0 +1,26 @@
+/* 侧边栏底色由 sidebar-background.js 写在 body 上的 --lt-sidebar-bg 决定。
+ *
+ * 主要靠第一条规则：在左右侧边栏这一层重新定义主题拿来画侧边栏的那几个
+ * 变量。自定义属性会往下继承，所以侧边栏里凡是用到它们的地方——面板底色、
+ * 标签栏、底部 vault 名那一条、各种悬停态——一次性跟着变，而中间的编辑区
+ * 和它自己的标签栏在这个作用域外，一点不受影响。
+ *
+ * 第二条是补漏。主题可能绕开变量，直接给侧边栏里的某些块写死颜色
+ * （Typewriter 就把标签栏和侧边栏里的笔记钉成了 --background-primary），
+ * 光改变量盖不住，按同样的范围再显式写一遍。 */
+
+body.lt-sidebar-bg .workspace-split.mod-left-split,
+body.lt-sidebar-bg .workspace-split.mod-right-split {
+	--background-secondary: var(--lt-sidebar-bg);
+	--background-secondary-alt: var(--lt-sidebar-bg);
+	--tab-container-background: var(--lt-sidebar-bg);
+}
+
+body.lt-sidebar-bg .mod-left-split .workspace-tab-header-container,
+body.lt-sidebar-bg .mod-right-split .workspace-tab-header-container,
+body.lt-sidebar-bg .mod-left-split .markdown-preview-view,
+body.lt-sidebar-bg .mod-right-split .markdown-preview-view,
+body.lt-sidebar-bg .mod-left-split .markdown-source-view.mod-cm6 .cm-scroller,
+body.lt-sidebar-bg .mod-right-split .markdown-source-view.mod-cm6 .cm-scroller {
+	background-color: var(--lt-sidebar-bg);
+}

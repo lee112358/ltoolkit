@@ -1,0 +1,40 @@
+/* 编辑区标签页：直角、彼此分开的小方块，激活的那块底色比编辑区深一档。
+ * 底色取 square-tabs.js 写在 body 上的 --lt-tab-bg。
+ *
+ * 只管主编辑区（.workspace-split.mod-root），侧边栏的标签栏不动。
+ *
+ * Obsidian 默认那套是浏览器式的「连体标签」：激活的标签底色和编辑区一样，
+ * 再靠两个伪元素在左右下角画出内凹的弧线，把标签和下面的正文连成一体。
+ * 拆成分离式要动三处 ——
+ *
+ *   1. 圆角归零。--tab-radius 管内层（也是悬停底色的形状），
+ *      --tab-radius-active 管外层。
+ *
+ *   2. 弧线归零。不去 display: none 那两个伪元素，而是把 --tab-curve 设成 0：
+ *      它们的宽高和 box-shadow 扩散半径全是这个变量算出来的，归零即消失，
+ *      也就不必跟着 Obsidian 那几条 clip-path 的写法走。
+ *
+ *   3. 底色从外层挪到内层。外层是撑满整条标签栏高度的，底色画在它身上就会
+ *      上下贴边、和正文连在一起；内层四周本来就有 1px / 4px / 3.5px 的内边距
+ *      （Obsidian 设的），底色挪过去就自动缩成一块四面不贴边的方块，
+ *      标签之间也就有了 8px 的缝 —— 「分离」是这么来的，不用另加 margin。
+ *      悬停底色本来就画在内层，两者位置天然对齐。
+ *      顺带去掉激活标签那圈描边，分离式靠颜色区分就够了。 */
+
+body.lt-square-tabs .workspace-split.mod-root .workspace-tab-header-container {
+	--tab-radius: 0;
+	--tab-radius-active: 0;
+	--tab-curve: 0;
+}
+
+body.lt-square-tabs .workspace-split.mod-root .workspace-tab-header.is-active {
+	background-color: transparent;
+	box-shadow: none;
+}
+
+body.lt-square-tabs
+	.workspace-split.mod-root
+	.workspace-tab-header.is-active
+	.workspace-tab-header-inner {
+	background-color: var(--lt-tab-bg);
+}
