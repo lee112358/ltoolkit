@@ -34,13 +34,13 @@ export class AttachmentCleaner extends Component {
 	}
 
 	onload() {
-		// addCommand 返回带最终 id 的命令对象，用它注销才不会依赖 id 的前缀规则
-		const command = this.plugin.addCommand({
-			id: "clean-unused-attachments",
-			name: "清理未引用的附件",
-			callback: () => this.run(),
-		});
-		this.register(() => this.plugin.removeCommand(command.id));
+		this.register(
+			this.plugin.useCommand(ID, {
+				id: "clean-unused-attachments",
+				name: "清理未引用的附件",
+				callback: () => this.run(),
+			}),
+		);
 	}
 
 	async run() {

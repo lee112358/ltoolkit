@@ -131,3 +131,57 @@
 .ltoolkit-settings .lt-sub-setting .setting-item-description {
 	font-size: var(--font-ui-smaller);
 }
+
+/* ---------- 功能带来的命令 ---------- */
+
+/* 命令是只读信息，不是可调的参数，所以和参数行拉开一点距离、字号再降一档。
+ * 绑定快捷键要去 Obsidian 自己的设置里做，这里不重复实现一个绑定控件。 */
+.ltoolkit-settings .lt-commands {
+	margin: 0.5em 0 0.2em;
+	padding-top: 0.5em;
+	border-top: 1px solid var(--background-modifier-border);
+}
+
+.ltoolkit-settings .lt-commands-title {
+	font-size: var(--font-ui-smaller);
+	font-weight: var(--font-semibold);
+	color: var(--text-muted);
+	margin-bottom: 0.25em;
+}
+
+/* 名字占满、快捷键靠右，多条命令的键会对齐成一列 */
+.ltoolkit-settings .lt-command {
+	display: flex;
+	align-items: baseline;
+	justify-content: space-between;
+	gap: 1em;
+	padding: 0.15em 0;
+	font-size: var(--font-ui-smaller);
+}
+
+.ltoolkit-settings .lt-command-name {
+	color: var(--text-normal);
+}
+
+.ltoolkit-settings .lt-command-key {
+	flex: 0 0 auto;
+	font-family: var(--font-interface);
+	color: var(--text-muted);
+	background: var(--background-modifier-hover);
+	border-radius: var(--radius-s);
+	padding: 0 0.4em;
+	white-space: nowrap;
+}
+
+/* 没绑键的不给底色，免得一个空壳子看着像个按钮 */
+.ltoolkit-settings .lt-command-key.mod-unbound {
+	background: none;
+	color: var(--text-faint);
+	font-style: italic;
+}
+
+.ltoolkit-settings .lt-commands-hint {
+	margin-top: 0.35em;
+	font-size: var(--font-ui-smaller);
+	color: var(--text-faint);
+}

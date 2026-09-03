@@ -18,6 +18,8 @@ export default class LToolkit extends Plugin {
 	async onload() {
 		this.settings = Object.assign({}, DEFAULTS, await this.loadData());
 		this.running = new Map();
+		/* 功能 id -> 它注册的命令。名字刻意不叫 commands，免得和 app.commands 看混 */
+		this.featureCommands = new Map();
 
 		/* CodeMirror 扩展没法按功能单独摘：registerEditorExtension 是挂在插件
 		 * 寿命上的。所以只注册一个数组，功能上下线时增删数组里的元素，
@@ -86,6 +88,42 @@ export default class LToolkit extends Plugin {
 			if (at !== -1) this.editorExtensions.splice(at, 1);
 			this.app.workspace.updateOptions();
 		};
+	}
+
+	/* 功能在 onload 里用它注册命令，返回的函数交给 this.register()，功能一关就摘掉。
+	 * 顺带记一份「哪项功能带了哪些命令」—— 装完插件不该还得去命令面板里翻，
+	 * 才知道多出来了什么。
+	 *
+	 * 注销这里有个坑：Plugin.addCommand 会**就地**把 spec.id 改写成
+	 * "<插件id>:<短id>" 再返回同一个对象，而 Plugin.removeCommand 拿到的参数
+	 * 自己还会补一次前缀。所以必须在 addCommand 之前把短 id 存下来，
+	 * 传 command.id 会变成删 "ltoolkit:ltoolkit:xxx"，删不掉。 */
+	useCommand(featureId, spec) {
+		const shortId = spec.id;
+		const command = this.addCommand(spec);
+
+		const list = this.featureCommands.get(featureId) ?? [];
+		list.push({ id: command.id, name: spec.name });
+		this.featureCommands.set(featureId, list);
+
+		return () => {
+			this.removeCommand(shortId);
+			const rest = (this.featureCommands.get(featureId) ?? []).filter(
+				(c) => c.id !== command.id,
+			);
+			if (rest.length > 0) this.featureCommands.set(featureId, rest);
+			else this.featureCommands.delete(featureId);
+		};
+	}
+
+	/* 命令当前绑的键，未绑定则是空串。printHotkeyForCommand 不在 obsidian.d.ts
+	 * 里，拿不到就当没绑 —— 这只是给人看的一行字，不值得为它加任何依赖。 */
+	hotkeyFor(commandId) {
+		try {
+			return this.app.hotkeyManager?.printHotkeyForCommand?.(commandId) ?? "";
+		} catch {
+			return "";
+		}
 	}
 
 	async setEnabled(feature, on) {
@@ -168,7 +206,8 @@ class LToolkitSettingTab extends PluginSettingTab {
 	 * 这样竖线是连续的一条，而不是每行各画一段。 */
 	displaySubSettings(block, feature) {
 		const options = feature.options ?? [];
-		if (options.length === 0 && !feature.action) return;
+		const commands = this.plugin.featureCommands.get(feature.id) ?? [];
+		if (options.length === 0 && commands.length === 0 && !feature.action) return;
 
 		const container = block.createDiv({ cls: "lt-sub-group" });
 
@@ -206,6 +245,8 @@ class LToolkitSettingTab extends PluginSettingTab {
 			);
 		}
 
+		this.displayCommands(container, commands);
+
 		if (!feature.action) return;
 
 		new Setting(container)
@@ -222,5 +263,30 @@ class LToolkitSettingTab extends PluginSettingTab {
 						else new Notice("功能未在运行，请重新开关一次");
 					}),
 			);
+	}
+
+	/* 这项功能带来的命令。只读地列一下名字和当前绑的键 —— 绑定要去 Obsidian
+	 * 自己的快捷键设置里做，这里不重复实现一个绑定控件。 */
+	displayCommands(container, commands) {
+		if (commands.length === 0) return;
+
+		const block = container.createDiv({ cls: "lt-commands" });
+		block.createDiv({ cls: "lt-commands-title", text: "命令" });
+
+		for (const command of commands) {
+			const row = block.createDiv({ cls: "lt-command" });
+			row.createSpan({ cls: "lt-command-name", text: command.name });
+
+			const hotkey = this.plugin.hotkeyFor(command.id);
+			row.createSpan({
+				cls: hotkey ? "lt-command-key" : "lt-command-key mod-unbound",
+				text: hotkey || "未绑定",
+			});
+		}
+
+		block.createDiv({
+			cls: "lt-commands-hint",
+			text: "在「设置 → 快捷键」里搜 LToolkit 即可绑定",
+		});
 	}
 }

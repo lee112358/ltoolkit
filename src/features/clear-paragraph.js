@@ -28,16 +28,18 @@ export class ClearParagraphMarker extends Component {
 	}
 
 	onload() {
-		const command = this.plugin.addCommand({
-			id: "clear-paragraph-marker",
-			name: "清除段落标签",
-			icon: "eraser",
-			editorCallback: (editor) =>
-				editLines(
-					editor,
-					(lines) => new Map(lines.map((line) => [line, clear(editor.getLine(line))])),
-				),
-		});
-		this.register(() => this.plugin.removeCommand(command.id));
+		this.register(
+			this.plugin.useCommand(ID, {
+				id: "clear-paragraph-marker",
+				name: "清除段落标签",
+				icon: "eraser",
+				editorCallback: (editor) =>
+					editLines(
+						editor,
+						(lines) =>
+							new Map(lines.map((line) => [line, clear(editor.getLine(line))])),
+					),
+			}),
+		);
 	}
 }

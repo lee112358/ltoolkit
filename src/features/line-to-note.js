@@ -62,18 +62,18 @@ export class LineToNote extends Component {
 	}
 
 	onload() {
-		// addCommand 返回带最终 id 的命令对象，用它注销才不会依赖 id 的前缀规则
-		const command = this.plugin.addCommand({
-			id: "line-to-note",
-			name: "当前行转成笔记 / 收回",
-			icon: "file-symlink",
-			editorCallback: (editor, ctx) => {
-				const file = ctx?.file ?? this.app.workspace.getActiveFile();
-				if (file) this.run(editor, file);
-				else new Notice("当前视图没有对应的文件");
-			},
-		});
-		this.register(() => this.plugin.removeCommand(command.id));
+		this.register(
+			this.plugin.useCommand(ID, {
+				id: "line-to-note",
+				name: "当前行转成笔记 / 收回",
+				icon: "file-symlink",
+				editorCallback: (editor, ctx) => {
+					const file = ctx?.file ?? this.app.workspace.getActiveFile();
+					if (file) this.run(editor, file);
+					else new Notice("当前视图没有对应的文件");
+				},
+			}),
+		);
 	}
 
 	async run(editor, file) {

@@ -54,18 +54,18 @@ export class InsertLine extends Component {
 	}
 
 	onload() {
-		// addCommand 返回带最终 id 的命令对象，用它注销才不会依赖 id 的前缀规则
 		for (const [id, name, below] of [
 			["insert-line-below", "在下方插入新行", true],
 			["insert-line-above", "在上方插入新行", false],
 		]) {
-			const command = this.plugin.addCommand({
-				id,
-				name,
-				icon: below ? "corner-down-left" : "corner-left-up",
-				editorCallback: (editor) => this.run(editor, below),
-			});
-			this.register(() => this.plugin.removeCommand(command.id));
+			this.register(
+				this.plugin.useCommand(ID, {
+					id,
+					name,
+					icon: below ? "corner-down-left" : "corner-left-up",
+					editorCallback: (editor) => this.run(editor, below),
+				}),
+			);
 		}
 	}
 

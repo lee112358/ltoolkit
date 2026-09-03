@@ -26,19 +26,19 @@ export class ToggleBookmark extends Component {
 	}
 
 	onload() {
-		// addCommand 返回带最终 id 的命令对象，用它注销才不会依赖 id 的前缀规则
-		const command = this.plugin.addCommand({
-			id: "toggle-bookmark",
-			name: "切换书签（当前笔记）",
-			icon: "bookmark",
-			checkCallback: (checking) => {
-				const context = this.context();
-				if (!context) return false;
-				if (!checking) this.toggle(context);
-				return true;
-			},
-		});
-		this.register(() => this.plugin.removeCommand(command.id));
+		this.register(
+			this.plugin.useCommand(ID, {
+				id: "toggle-bookmark",
+				name: "切换书签（当前笔记）",
+				icon: "bookmark",
+				checkCallback: (checking) => {
+					const context = this.context();
+					if (!context) return false;
+					if (!checking) this.toggle(context);
+					return true;
+				},
+			}),
+		);
 	}
 
 	/* 书签插件没启用、或当前视图没有对应文件时返回 null，命令面板里就不出现 */
