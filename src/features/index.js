@@ -305,6 +305,13 @@ export const FEATURES = [
 		bodyClass: "lt-tab-caret-align",
 	},
 	{
+		id: "fileTreeIcons",
+		group: "appearance",
+		name: "文件图标",
+		desc: "给侧边栏文件树里的文件加一个图标。Obsidian 原生给文件夹画了折叠箭头，文件前面却是空的，一列全是文字不好扫。只画文件这一个——文件夹有箭头当标记了，再补一个是重复；也不按扩展名分图标。图标不占位，落在同级文件夹那颗折叠箭头的位置上，所以文件名和文件夹名照旧对齐，不会被图标推着往右挪。颜色跟着文字走，选中和悬停时一起变，明暗主题都不用另配。",
+		bodyClass: "lt-file-tree-icons",
+	},
+	{
 		id: "hideExplorerTabHeader",
 		group: "appearance",
 		name: "隐藏文件浏览器的标签栏",

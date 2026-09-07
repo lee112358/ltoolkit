@@ -1,0 +1,67 @@
+/* 文件树里给文件加一个图标。Obsidian 原生给文件夹画了折叠箭头，文件前面什么都没有，
+ * 一列全是文字，扫一眼分不出哪行是文件夹、哪行是笔记。
+ *
+ * 只画文件这一个图标。文件夹本来就有折叠箭头当标记了，再补一个是重复；
+ * 也不按扩展名分图标 —— 图标在这里只承担「这一行是文件」这一件事。
+ *
+ * 关键是图标不能占位：文件名和同级文件夹名本来是对齐的（两种行的
+ * padding-inline-start 都是 --size-4-6），图标若排在文件名前面，被推右的是文件名，
+ * 对齐的反倒成了图标。所以走 Obsidian 给折叠箭头用的那一套：绝对定位、不设 left，
+ * 保留静态位置后用 margin-inline-start 往左拽 --size-4-5 —— 数值和下面这条核心规则
+ * 一模一样，图标于是正好落在同级文件夹那颗箭头的位置上，文件名一个像素都不动。
+ *
+ *   .tree-item-self .tree-item-icon {
+ *     position: absolute;
+ *     margin-inline-start: calc(-1 * var(--size-4-5));
+ *     width: var(--size-4-4);
+ *   }
+ *
+ * 绝对定位另有一个好处：包含块是 .tree-item-self（core 给了 position: relative），
+ * 不是设了 overflow 的 .tree-item-inner，因此拽到名字左边也不会被裁掉。
+ *
+ * ::before 只能挂在 .tree-item-inner 上，不能挂 .tree-item-self —— 后者的 ::before
+ * core 自己占着（一个零宽空格，给 align-items: baseline 定基线用），盖掉会错位。
+ *
+ * 图形取自 Lucide（Obsidian 自己那套图标）的 file，用 mask 而不是 background-image
+ * 来画，颜色由 currentColor 给，因此选中、悬停、当前打开的那行等各种状态下图标和
+ * 文字始终同色，明暗主题也不用各配一份。描边比 Lucide 默认的 2 细一档，和箭头的
+ * 观感更接近。
+ *
+ * 由 features/index.js 里的 bodyClass "lt-file-tree-icons" 控制开关。 */
+
+body.lt-file-tree-icons
+	.workspace-leaf-content[data-type="file-explorer"]
+	.nav-file-title-content::before {
+	content: "";
+	position: absolute;
+	/* 上下拉满再 margin: auto，在行内垂直居中；左右不设，留着静态位置好让
+	 * margin-inline-start 把它从文件名前面拽进左边的空槽里 */
+	top: 0;
+	bottom: 0;
+	margin-block: auto;
+	margin-inline-start: calc(-1 * var(--size-4-5));
+	width: var(--size-4-4);
+	height: var(--icon-xs);
+	background-color: currentColor;
+	opacity: var(--icon-opacity); /* 跟折叠箭头同一档淡度 */
+	-webkit-mask-image: var(--lt-icon-file);
+	mask-image: var(--lt-icon-file);
+	-webkit-mask-repeat: no-repeat;
+	mask-repeat: no-repeat;
+	-webkit-mask-position: center;
+	mask-position: center;
+	-webkit-mask-size: contain;
+	mask-size: contain;
+}
+
+/* 重命名时这一行会变高、inner 变成可编辑元素，图标留着只会跟着飘。先收起来。 */
+body.lt-file-tree-icons
+	.workspace-leaf-content[data-type="file-explorer"]
+	.is-being-renamed
+	.nav-file-title-content::before {
+	display: none;
+}
+
+body.lt-file-tree-icons {
+	--lt-icon-file: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23fff' stroke-width='1.75' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z'/%3E%3Cpath d='M14 2v4a2 2 0 0 0 2 2h4'/%3E%3C/svg%3E");
+}

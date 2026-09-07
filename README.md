@@ -4,7 +4,7 @@
 
 A bundle of small editing, attachment, and appearance tweaks for [Obsidian](https://obsidian.md).
 
-Every feature is a separate toggle in one settings tab. Seventeen of the twenty-four are on out of the box — everything under Editor and Attachments, plus five appearance tweaks. The rest, including anything tied to a specific theme, start off. Features that take parameters show them indented under their own switch, and any commands a feature adds are listed there too, with the hotkey they are currently bound to.
+Every feature is a separate toggle in one settings tab. Eighteen of the twenty-five are on out of the box — everything under Editor and Attachments, plus six appearance tweaks. The rest, including anything tied to a specific theme, start off. Features that take parameters show them indented under their own switch, and any commands a feature adds are listed there too, with the hotkey they are currently bound to.
 
 <img src="docs/settings-en.svg" alt="The settings tab: one switch per feature, parameters indented underneath" width="720">
 
@@ -78,6 +78,8 @@ Every feature is a separate toggle in one settings tab. Seventeen of the twenty-
 - **Floating scrollbars** — Removes the scrollbar's track fill and the divider line beside the text, leaving only the thumb. On macOS the scrollbar is the native one, so the only lever is `scrollbar-color`; a transparent track drops the divider along with the fill, and shows whatever surface is behind it, which is correct in the editor and in both sidebars.
 
 - **Fix caret on empty indented lines** — After pressing <kbd>Tab</kbd> on a line you haven't typed on yet, the caret sits about ten pixels left of where the character actually lands, then jumps right on the first keystroke. Those lines aren't yet treated as list continuations, so they miss the `tab-size` Obsidian gives list lines; restoring it fixes the offset. Code blocks are unaffected.
+
+- **File icons** — Puts an icon in front of every file in the sidebar's file tree. Obsidian draws a collapse arrow on folders but nothing at all on files, so the tree reads as one column of text. Files only — a folder already has its arrow, and a second marker on it is redundant — and one icon for all of them, not one per extension. The icon takes no space in the row: it drops into the slot where a sibling folder's collapse arrow sits, so filenames stay aligned with folder names instead of being pushed right by their own icon. It takes its colour from the text, so selection and hover carry it along and neither theme needs its own version.
 
 - **Hide the file explorer's tab bar** — After splitting a sidebar, the pane holding the file explorer gets a tab bar with a single icon in it, costing a row of height. This reclaims it. The *new file / sort* row and the sidebar collapse button stay. Only applies while the file explorer is the sole tab in its group, so dragging another pane in brings the bar back.
 
