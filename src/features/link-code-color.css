@@ -1,0 +1,27 @@
+/* 链接文字写成行内代码时，让它跟着链接的颜色走。
+ *
+ * [`40-archive/`](../40-archive) 这种写法，方括号里是一段行内代码。核心给行内代码
+ * 定死了颜色：
+ *
+ *   .markdown-rendered code            { color: var(--code-normal) }   阅读视图
+ *   .cm-s-obsidian span.cm-inline-code { color: var(--code-normal) }   实时预览
+ *
+ * 链接色是另一个变量（--link-color，默认取主题强调色），两者撞在一起时代码色赢，
+ * 于是同一篇笔记里 [vision](...) 是强调色、[`40-archive/`](...) 是代码色，看着像
+ * 两种不同的东西。Typewriter 把 --code-normal 设成了蓝色，撞得尤其明显。
+ *
+ * 这里只改颜色一项，行内代码的底色、边框、字号、圆角一概不动 —— 它看上去还是一段
+ * 代码，只是颜色说明了「这也是个链接」。未解析的链接跟着一起淡下去，因为阅读视图
+ * 那条用的是 inherit，继承的就是链接自己当前的颜色。
+ *
+ * 由 features/index.js 里的 bodyClass "lt-link-code-color" 控制开关。 */
+
+body.lt-link-code-color .markdown-rendered a code {
+	color: inherit;
+}
+
+/* 实时预览里链接的显示文字带 cm-link，和 cm-inline-code 落在同一个 span 上。
+ * 这边没有 inherit 可继承（是并列的 class 不是父子），只能直接指定链接色。 */
+body.lt-link-code-color .markdown-source-view.mod-cm6 .cm-inline-code.cm-link {
+	color: var(--link-color);
+}

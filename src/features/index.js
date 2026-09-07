@@ -320,6 +320,13 @@ export const FEATURES = [
 		bodyClass: "lt-file-tree-icons",
 	},
 	{
+		id: "linkCodeColor",
+		group: "appearance",
+		name: "链接里的行内代码跟随链接色",
+		desc: "把链接文字写成行内代码时（[`40-archive/`](../40-archive) 这种），显示的是代码色而不是链接色——核心给行内代码定死了 --code-normal，撞上链接色时它赢。于是同一篇笔记里 [vision](...) 是强调色、[`40-archive/`](...) 是另一个色，看着像两种不同的东西；Typewriter 把 --code-normal 设成了蓝色，撞得尤其明显。开着这项就让它跟链接一个颜色，底色、边框、字号、圆角都不动，看上去还是一段代码。阅读视图和实时预览都生效。",
+		bodyClass: "lt-link-code-color",
+	},
+	{
 		id: "hideExplorerTabHeader",
 		group: "appearance",
 		name: "隐藏文件浏览器的标签栏",

@@ -10,6 +10,7 @@
 @import "./features/hide-explorer-tab-header.css";
 @import "./features/file-tree-icons.css";
 @import "./features/folder-link.css";
+@import "./features/link-code-color.css";
 @import "./features/attachment-cleaner.css";
 @import "./features/sidebar-background.css";
 @import "./features/active-line.css";

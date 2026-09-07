@@ -4,7 +4,7 @@
 
 A bundle of small editing, attachment, and appearance tweaks for [Obsidian](https://obsidian.md).
 
-Every feature is a separate toggle in one settings tab. Nineteen of the twenty-six are on out of the box — everything under Editor and Attachments, plus six appearance tweaks. The rest, including anything tied to a specific theme, start off. Features that take parameters show them indented under their own switch, and any commands a feature adds are listed there too, with the hotkey they are currently bound to.
+Every feature is a separate toggle in one settings tab. Twenty of the twenty-seven are on out of the box — everything under Editor and Attachments, plus seven appearance tweaks. The rest, including anything tied to a specific theme, start off. Features that take parameters show them indented under their own switch, and any commands a feature adds are listed there too, with the hotkey they are currently bound to.
 
 <img src="docs/settings-en.svg" alt="The settings tab: one switch per feature, parameters indented underneath" width="720">
 
@@ -82,6 +82,8 @@ Every feature is a separate toggle in one settings tab. Nineteen of the twenty-s
 - **Fix caret on empty indented lines** — After pressing <kbd>Tab</kbd> on a line you haven't typed on yet, the caret sits about ten pixels left of where the character actually lands, then jumps right on the first keystroke. Those lines aren't yet treated as list continuations, so they miss the `tab-size` Obsidian gives list lines; restoring it fixes the offset. Code blocks are unaffected.
 
 - **File icons** — Puts an icon in front of every file in the sidebar's file tree. Obsidian draws a collapse arrow on folders but nothing at all on files, so the tree reads as one column of text. Files only — a folder already has its arrow, and a second marker on it is redundant — and one icon for all of them, not one per extension. The icon takes no space in the row: it drops into the slot where a sibling folder's collapse arrow sits, so filenames stay aligned with folder names instead of being pushed right by their own icon. It takes its colour from the text, so selection and hover carry it along and neither theme needs its own version.
+
+- **Link text in code takes the link colour** — Write a link's text as inline code — ``[`40-archive/`](../40-archive)`` — and it renders in the code colour, not the link colour: core pins `--code-normal` on inline code, and that wins over the link colour. So one note ends up with `[vision](...)` in the accent colour and ``[`40-archive/`](...)`` in another, as if they were different kinds of thing; Typewriter maps `--code-normal` to blue, which makes the clash loud. This colours it like the link it is, leaving the background, border, size and radius alone, so it still reads as code. Both Reading view and Live Preview.
 
 - **Hide the file explorer's tab bar** — After splitting a sidebar, the pane holding the file explorer gets a tab bar with a single icon in it, costing a row of height. This reclaims it. The *new file / sort* row and the sidebar collapse button stay. Only applies while the file explorer is the sole tab in its group, so dragging another pane in brings the bar back.
 
