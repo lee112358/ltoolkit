@@ -1,0 +1,90 @@
+/* 指向文件夹的链接，鼠标悬停时那个浮窗的样式。
+ *
+ * 这一份没有挂在功能的 body class 下，是本仓库里除 base.css 外唯一的例外：
+ * .lt-folder-preview 这个 class 是功能自己在 JS 里加到浮窗上的，功能关着就没有任何
+ * 元素带它，等于开关已经由 JS 把着了。而且浮窗挂在 document.body 下、弹出窗口里
+ * 还是另一个 document 的 body —— body class 只加在主窗口上，真挂上去反而会漏样式。
+ *
+ * 尺寸和颜色全部走 Obsidian 自己的变量，跟着主题和明暗模式走，这里不定死任何颜色。
+ * 外层的 .popover.hover-popover 由核心画（背景、边框、圆角、阴影），只补内容部分。 */
+
+/* 核心把 .popover 设成了 flex 行容器（display: flex + justify-content: stretch），
+ * 所以内容统一装在一个 body 里当唯一的孩子。另外 .popover.hover-popover > * 会给
+ * 每个孩子钉上 --popover-width，这里用更高的特异度撤掉，让浮窗自己按内容收宽 */
+.popover.hover-popover.lt-folder-preview > .lt-folder-preview-body {
+	width: auto;
+	padding: var(--size-4-3);
+	max-width: 32em;
+	font-size: var(--font-ui-small);
+	line-height: var(--line-height-tight);
+}
+
+.lt-folder-preview-title {
+	display: flex;
+	align-items: center;
+	gap: var(--size-2-2);
+	color: var(--text-normal);
+	font-weight: var(--font-medium);
+}
+
+/* 路径可能很长，撑宽浮窗不如就地截断。尾斜杠是另一个 span 且不参与收缩，
+ * 所以截掉的是路径本身，「这是目录」的记号始终留在末尾 */
+.lt-folder-preview-path {
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+
+.lt-folder-preview-slash {
+	flex: none;
+}
+
+/* 条目和文件夹排在同一列，只往里缩两格 —— 看起来就是展开的那个文件夹底下的内容 */
+.lt-folder-preview-list {
+	margin-top: var(--size-2-2);
+	padding-inline-start: 2ch;
+	max-height: 18em;
+	overflow-y: auto;
+}
+
+.lt-folder-preview-item {
+	display: flex;
+	align-items: center;
+	gap: var(--size-2-2);
+	padding: var(--size-2-1) 0;
+	color: var(--text-muted);
+}
+
+.lt-folder-preview-name {
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+
+.lt-folder-preview-icon {
+	display: flex;
+	flex: none;
+	color: var(--icon-color);
+	opacity: var(--icon-opacity);
+}
+
+.lt-folder-preview-icon .svg-icon {
+	--icon-size: var(--icon-xs);
+	--icon-stroke: var(--icon-s-stroke-width);
+}
+
+.lt-folder-preview-empty,
+.lt-folder-preview-more {
+	color: var(--text-faint);
+	font-style: italic;
+}
+
+/* 空文件夹这一行挂在 body 上，缩进得自己补；「还有 N 项」在列表里，跟着列表缩 */
+.lt-folder-preview-empty {
+	margin-top: var(--size-2-2);
+	padding-inline-start: 2ch;
+}
+
+.lt-folder-preview-more {
+	padding: var(--size-2-1) 0;
+}

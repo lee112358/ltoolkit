@@ -7,6 +7,7 @@ import { CanvasMouseSwap } from "./canvas-mouse-swap.js";
 import { ClearParagraphMarker } from "./clear-paragraph.js";
 import { BlockEscape, ID as BLOCK_ESCAPE } from "./block-escape.js";
 import { ID as INSERT_LINE, InsertLine } from "./insert-line.js";
+import { ID as FOLDER_LINK, FolderLink } from "./folder-link.js";
 import { ID as LINE_HEIGHT, LineHeight } from "./line-height.js";
 import { ID as PROGRESSIVE_SELECT, ProgressiveSelect } from "./progressive-select.js";
 import { ID as TOGGLE_BOOKMARK, ToggleBookmark } from "./toggle-bookmark.js";
@@ -104,6 +105,13 @@ export const FEATURES = [
 		name: "当前行转成笔记 / 收回",
 		desc: "把光标所在行的文字抽成一篇独立笔记，建在当前笔记的同一目录下，本行换成指向它的链接。在链接行上再执行一次则反过来：把那篇笔记的内容取回来铺在本行下面，并把笔记移入废纸篓。",
 		create: (app, plugin) => new LineToNote(app, plugin),
+	},
+	{
+		id: FOLDER_LINK,
+		group: "editor",
+		name: "指向文件夹的链接",
+		desc: "[名字](学习/数学) 这种括号里写相对路径的链接，如果指到的是一个文件夹，Obsidian 会处处当它是坏链接——负责解析的 getFirstLinkpathDest 只查文件索引，文件夹不在里面。开着这项就把三处一起对上：点击改成在左边的文件浏览器里定位它（侧边栏没开会先开，逐级展开父目录，滚过去并选中，和内置的「在文件列表中显示当前文件」同一套动作），不再去建新文件、也不再报「Folder already exists」；鼠标悬停不再弹「无法找到文件」，改成列出这个文件夹里有什么，标题是带尾斜杠的路径，条目缩进两格排在下面；链接本身也不再画成未解析的淡色，和正常链接一个颜色。三处都接在「拿到链接文本之后」那一层，所以阅读视图和实时预览一视同仁——实时预览里的链接根本不是 a 标签，是 CodeMirror 的装饰，按 DOM 拦只拦得住一半。解不出文件夹就什么都不做，普通的文件链接不受影响。[[学习/数学]] 这种 wiki 写法同样管用。切换开关后阅读视图会自动重绘，实时预览里已经打开的笔记要重开一次颜色才刷新。",
+		create: (app, plugin) => new FolderLink(app, plugin),
 	},
 	{
 		id: SCROLL_MEMORY,

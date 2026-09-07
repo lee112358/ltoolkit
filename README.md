@@ -4,7 +4,7 @@
 
 A bundle of small editing, attachment, and appearance tweaks for [Obsidian](https://obsidian.md).
 
-Every feature is a separate toggle in one settings tab. Eighteen of the twenty-five are on out of the box — everything under Editor and Attachments, plus six appearance tweaks. The rest, including anything tied to a specific theme, start off. Features that take parameters show them indented under their own switch, and any commands a feature adds are listed there too, with the hotkey they are currently bound to.
+Every feature is a separate toggle in one settings tab. Nineteen of the twenty-six are on out of the box — everything under Editor and Attachments, plus six appearance tweaks. The rest, including anything tied to a specific theme, start off. Features that take parameters show them indented under their own switch, and any commands a feature adds are listed there too, with the hotkey they are currently bound to.
 
 <img src="docs/settings-en.svg" alt="The settings tab: one switch per feature, parameters indented underneath" width="720">
 
@@ -34,6 +34,8 @@ Every feature is a separate toggle in one settings tab. Eighteen of the twenty-f
 - **Convert to table** — Splits the current line, or the selected lines, on spaces and tabs into a Markdown table. The first row becomes the header; a single line is padded out to three rows. On an empty line it hands off to Obsidian's *Insert table*.
 
 - **Line to note, and back** — Pulls the current line out into its own note in the same folder and leaves a link behind. Run it again on that link and it reverses: the note's content comes back inline and the note goes to the trash.
+
+- **Links to folders** — `[name](study/maths)`, where the parentheses hold a relative path, reads as a broken link everywhere when the path is a folder: the resolver behind it, `getFirstLinkpathDest`, only searches the file index, and folders aren't in it. This lines up the three places that get it wrong. Clicking reveals the folder in the file explorer — opening the sidebar if it's closed, expanding each parent, scrolling to it and selecting it, the same steps as the built-in *Reveal current file in navigation* — instead of trying to create a new file and reporting *Folder already exists*. Hovering no longer says *Unable to find file*; it lists what the folder holds, under the path with a trailing slash, indented two spaces beneath it. And the link stops being painted in the faded unresolved colour, so it looks like any other link. All three hook in after the link text is resolved, which is what makes Reading view and Live Preview behave the same — a Live Preview link isn't an `<a>` at all but a CodeMirror decoration, so hooking the DOM would only ever fix half of it. If the path doesn't resolve to a folder nothing happens, so ordinary file links are untouched. Wiki links, `[[study/maths]]`, work the same way. Toggling the switch redraws Reading view on its own; notes already open in Live Preview keep the old colour until they are reopened.
 
 - **Remember scroll position** — Per-file scroll position, restored when you come back. Obsidian keeps that position on a *tab's navigation history* entry, so it only survives pressing Back — reopening the note from the file list starts at the top. Positions live in local storage keyed by vault, so sync plugins can't carry them between devices and overwrite each other.
   <br>*Options:* also restore the cursor and selection · restore delay for long notes.
