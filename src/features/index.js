@@ -9,6 +9,7 @@ import { BlockEscape, ID as BLOCK_ESCAPE } from "./block-escape.js";
 import { ID as INSERT_LINE, InsertLine } from "./insert-line.js";
 import { ID as FOLDER_LINK, FolderLink } from "./folder-link.js";
 import { ID as LINE_HEIGHT, LineHeight } from "./line-height.js";
+import { ID as VIEW_PARITY, ViewParity } from "./view-parity.js";
 import { ID as PROGRESSIVE_SELECT, ProgressiveSelect } from "./progressive-select.js";
 import { ID as TOGGLE_BOOKMARK, ToggleBookmark } from "./toggle-bookmark.js";
 import { ID as SCROLL_MEMORY, ScrollMemory } from "./scroll-memory.js";
@@ -266,6 +267,15 @@ export const FEATURES = [
 				placeholder: "1.6",
 			},
 		],
+	},
+	{
+		id: VIEW_PARITY,
+		group: "appearance",
+		name: "编辑与阅读视图观感一致",
+		desc: "阅读视图的块间距是核心写死的 --p-spacing（1rem），编辑视图里段落之间那个空行则是真实存在的一行、高度等于行高乘字号，所以行高调得越大两边差得越远。这里把阅读视图的段间距改成「一个空行的高度」，段落、标题上下、列表、表格、代码块、引用和 callout 跟着一起走；源码里两块之间没写空行的（比如「一句话：」底下直接跟列表），阅读视图也照着不留空当，不再凭空多出一行 —— 这一条得读源码行号，纯 CSS 做不到。顺带把指向库内文件的链接下划线在两边统一。",
+		bodyClass: "lt-view-parity",
+		create: (app) => new ViewParity(app),
+		enabledByDefault: false,
 	},
 	{
 		id: SQUARE_TABS,

@@ -1,0 +1,132 @@
+/* 编辑视图和阅读视图的观感对齐。
+ *
+ * 两边的行高本来就是同一个值，真正差在「段落之间的间距是怎么来的」：
+ *
+ *   阅读视图  相邻块的 margin 折叠出来，间距 = --p-spacing，核心写死 1rem
+ *   编辑视图  段落之间那个空行是真实存在的一行，间距 = 行高 × 字号
+ *
+ * 后者跟着行高走、前者不跟，所以行高调得越大两边差得越远：1.5 是 24px 对
+ * 16px，2 就成了 32px 对 16px。这里把阅读视图的 --p-spacing 改成「一个空行
+ * 的高度」，段落、列表块、表格、标题的间距都是核心从这个变量推出来的，改一个
+ * 就一起跟上了 —— 也因此核心自己那些例外（嵌套列表不加间距、块里第一个元素
+ * 不留上边距）原样保留，不用在这里重写一遍。
+ *
+ * 行高优先取「正文行高」功能写在 body 上的 --lt-line-height；那个功能没开时
+ * 这个变量不存在，退回 Obsidian 自己的 --line-height-normal。
+ *
+ * 乘的是 --font-text-size 而不是 1em：--p-spacing 也会被标题的 margin 用到，
+ * 写成 em 的话在 h1 上 1em 是 h1 的字号（1.618em），间距会跟着标题一起放大。
+ */
+
+body.lt-view-parity .markdown-preview-view {
+	--p-spacing: calc(var(--lt-line-height, var(--line-height-normal)) * var(--font-text-size));
+
+	/* 标题上方也只留一个空行 —— 见下面「标题」那一节，两个视图都不再给标题
+	 * 额外的呼吸空间，间距一律由源码里的空行数决定。核心这里写的是
+	 * --p-spacing × 2.5。 */
+	--heading-spacing: var(--p-spacing);
+}
+
+/* 这几块的上下间距在阅读视图里不走 --p-spacing，是浏览器默认的 1em ——
+ * 在 <pre> 上 1em 还是代码字号，比正文小，跟别的块对不齐。编辑视图里它们
+ * 和普通段落一样靠空行分开，所以一并拉到同一个值上。 */
+body.lt-view-parity .markdown-preview-view :is(pre, blockquote, .callout) {
+	margin-block: var(--p-spacing);
+}
+
+/* 嵌套的 callout 两个视图本来就都是 1em，别去动它 */
+body.lt-view-parity .markdown-preview-view .callout-content .callout {
+	margin-block: 1em;
+}
+
+/* ---------- 源码里紧挨着的两块 ---------- */
+
+/* 「上一块和这一块之间有没有空行」不进渲染结果 —— `文字\n- 列表` 和
+ * `文字\n\n- 列表` 渲染出来的 HTML 一模一样，阅读视图两种写法都照给一个
+ * --p-spacing。编辑视图那边空行是真实存在的一行，没写就是紧挨着，于是同一段
+ * 内容两边差出整整一行。
+ *
+ * lt-tight-top 由 view-parity.js 挂在「源码里上一行不是空行」的那些块上。
+ * 上下两块的 margin 得一起收 —— 相邻 margin 是折叠取大的，只收一边另一边
+ * 照样撑在那儿。 */
+body.lt-view-parity .markdown-preview-view .lt-tight-top,
+body.lt-view-parity .markdown-preview-view .lt-tight-top > * {
+	margin-top: 0;
+}
+
+body.lt-view-parity .markdown-preview-view div:has(+ .lt-tight-top),
+body.lt-view-parity .markdown-preview-view div:has(+ .lt-tight-top) > * {
+	margin-bottom: 0;
+}
+
+/* ---------- 标题 ---------- */
+
+/* 目标是切视图时标题那一段一点不动。三处要掰平。
+ *
+ * 一、编辑视图的标题行自带一份上内边距（核心的 --p-spacing），阅读视图那边
+ *     对应的是 --heading-spacing（--p-spacing × 2.5）；而「标题 + 空行 + 标题」
+ *     时核心又把那份内边距收成 0，同一篇里两套算法。干脆两边都不给标题额外的
+ *     空间，让它和别的块一视同仁：间距只由源码里的空行数决定。 */
+body.lt-view-parity .markdown-source-view.mod-cm6 .cm-line.HyperMD-header {
+	padding-top: 0;
+}
+
+/* 二、主题爱单独拿 h1 做文章（Typewriter 是 `:root h1 { margin: 0 }`），结果
+ *     h1 和 h2 以下走的是两套规则，一切视图就散了。压回核心那一套，所有级别
+ *     重新一致。
+ *
+ *     主题往往还会用 :has() 给紧挨着 h1 的段落补一份别的间距，那个不用管 ——
+ *     相邻 margin 折叠取大值，标题这份（一个空行）比主题补的那点大，本来就赢。 */
+body.lt-view-parity .markdown-preview-view :is(h1, h2, h3, h4, h5, h6) {
+	margin-block: var(--p-spacing);
+}
+
+/* 列表项里的标题核心是不给 margin 的，上面那条特异度更高会盖掉，补回来 */
+body.lt-view-parity .markdown-preview-view li :is(h1, h2, h3, h4, h5) {
+	margin-block: 0;
+}
+
+/* 三、标题行高比字体的自然高度还紧时（Typewriter 的 --h1-line-height 是 1.2，
+ *     而字体 ascent+descent 约合 1.29 倍字号），编辑视图会比阅读视图高出一两个
+ *     像素：行里那几个 img.cm-widgetBuffer 是零宽的替换元素、坐在基线上，行盒
+ *     得额外容纳基线下方的降部。让它们改成贴着行盒顶端对齐就没这回事。
+ *
+ *     只管标题行 —— 正文行高宽松，碰不到这个边界，动了反而可能出别的岔子。 */
+body.lt-view-parity .markdown-source-view.mod-cm6 .cm-line.HyperMD-header img.cm-widgetBuffer {
+	vertical-align: top;
+}
+
+/* ---------- 引用块 ---------- */
+
+/* 上下高度：核心两边都不给引用块上下内边距（阅读视图那条明写着
+ * padding-top/bottom: 0）。主题常单独给实时预览的引用行补一点高度，
+ * 而那是逐行加的 —— Typewriter 是每行上下各 7px，十行的引用就多出 140px。 */
+body.lt-view-parity .markdown-source-view.mod-cm6.is-live-preview .HyperMD-quote {
+	padding-top: 0;
+	padding-bottom: 0;
+}
+
+/* 左侧留白：实时预览里 `> ` 那两个字符是透明的、但仍旧占着宽度，所以文字距
+ * 竖线的距离就等于这两个字符的渲染宽度（当前字体下约 16.8px）—— 那是字体决定
+ * 的量，没有变量可调。阅读视图这边是 blockquote 的 padding-inline-start，核心
+ * 给 --size-4-6（24px），加上 2px 竖线一共 26px，宽出 9px 多。
+ *
+ * 所以只能把阅读视图收下来去就编辑视图。--size-4-4 是最接近的那一档，余下
+ * 一个多像素是「字符宽度」和「尺寸档位」本来就对不齐的零头。 */
+body.lt-view-parity .markdown-preview-view blockquote {
+	padding-inline-start: var(--size-4-4);
+}
+
+/* ---------- 链接 ---------- */
+
+/* 指向库内文件的链接，两种视图走的不是同一个变量：编辑视图里 [文字](路径)
+ * 是 .cm-link，吃的是 --link-external-decoration；阅读视图里它渲染成
+ * a.internal-link，吃的是 --link-decoration。主题只关掉了后者，于是编辑时有
+ * 下划线、切过去就没了。统一成都有。
+ *
+ * 只在正文范围里改，界面上别处的链接还听主题的。 */
+body.lt-view-parity .markdown-preview-view,
+body.lt-view-parity .markdown-source-view {
+	--link-decoration: underline;
+	--link-decoration-hover: underline;
+}
