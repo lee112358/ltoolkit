@@ -9,6 +9,7 @@ import { BlockEscape, ID as BLOCK_ESCAPE } from "./block-escape.js";
 import { ID as INSERT_LINE, InsertLine } from "./insert-line.js";
 import { ID as FOLDER_LINK, FolderLink } from "./folder-link.js";
 import { ID as LINE_HEIGHT, LineHeight } from "./line-height.js";
+import { ID as HEADING_COLORS, HeadingColors } from "./heading-colors.js";
 import { ID as VIEW_PARITY, ViewParity } from "./view-parity.js";
 import { ID as PROGRESSIVE_SELECT, ProgressiveSelect } from "./progressive-select.js";
 import { ID as TOGGLE_BOOKMARK, ToggleBookmark } from "./toggle-bookmark.js";
@@ -276,6 +277,60 @@ export const FEATURES = [
 		bodyClass: "lt-view-parity",
 		create: (app) => new ViewParity(app),
 		enabledByDefault: false,
+	},
+	{
+		id: HEADING_COLORS,
+		group: "appearance",
+		name: "标题按级别分色",
+		desc: "给文件标题和六级标题各挑一个颜色，阅读视图和实时预览一起生效 —— 核心这两处用的是同一组 --inline-title-color / --h1-color…--h6-color，这里重定义那几个变量就够了。每项只有一个值，明暗模式共用。少数主题（比如 OnePage）直接给标题元素写颜色、不走这组变量，那种主题下盖不住。",
+		bodyClass: "lt-heading-colors",
+		create: (app, plugin) => new HeadingColors(app, plugin),
+		enabledByDefault: false,
+		options: [
+			{
+				key: "title",
+				type: "color",
+				name: "文件标题",
+				desc: "笔记正文最上面那行标题（Obsidian 设置里的「显示内联标题」）。",
+				default: "#000000",
+			},
+			{
+				key: "h1",
+				type: "color",
+				name: "一级标题",
+				default: "#a81f1f",
+			},
+			{
+				key: "h2",
+				type: "color",
+				name: "二级标题",
+				default: "#634393",
+			},
+			{
+				key: "h3",
+				type: "color",
+				name: "三级标题",
+				default: "#1977ae",
+			},
+			{
+				key: "h4",
+				type: "color",
+				name: "四级标题",
+				default: "#20a297",
+			},
+			{
+				key: "h5",
+				type: "color",
+				name: "五级标题",
+				default: "#000000",
+			},
+			{
+				key: "h6",
+				type: "color",
+				name: "六级标题",
+				default: "#000000",
+			},
+		],
 	},
 	{
 		id: SQUARE_TABS,

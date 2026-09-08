@@ -76,6 +76,9 @@ Every feature is a separate toggle in one settings tab. Twenty of the twenty-sev
 
 - **Consistent Reading/Editing view** — Reading view's block spacing is a hard-coded `--p-spacing` (1rem), while in the editor the blank line between paragraphs is a real line whose height is line-height × font size — so the higher the line height, the further apart the two views drift. This makes Reading view's block spacing equal one blank line, and paragraphs, headings, lists, tables, code blocks, quotes and callouts all follow. Headings no longer get extra breathing room on either side: spacing comes purely from how many blank lines the source has. Where the source has no blank line between two blocks (a sentence ending in a colon followed straight by a list, say), Reading view leaves no gap either — that part needs a post-processor to read the source line numbers, since CSS cannot see the file. Blockquote height and left indent, and underlines on links to vault files, are matched too. *Theme-dependent.*
 
+- **Per-level heading colours** — Pick a colour for the note title and for each of the six heading levels. Obsidian drives both views and the inline title from the same `--inline-title-color` / `--h1-color`…`--h6-color`, so redefining those variables is enough for Reading view and Live Preview to follow together.
+  <br>*Options:* note title · headings 1–6, seven colour pickers.
+
 - **Square, detached tabs** — Turns the main tab bar's browser-style connected tabs into separate square chips: radius flattened, the decorative curves that weld the active tab to the note removed, and the active background moved to the inner element so each tab sits clear of its neighbours and of the content below.
   <br>*Options:* derive the shade from the editor background — darker in light mode, lighter in dark mode — or pick a colour · shade depth.
 

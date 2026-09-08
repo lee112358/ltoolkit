@@ -1,0 +1,27 @@
+/* 标题按级别分色 —— 颜色由 heading-colors.js 写在 body 上的那七个变量决定。
+ *
+ * 核心给两个视图用的是同一组变量：
+ *
+ *   .markdown-rendered h1   { color: var(--h1-color) }            阅读视图
+ *   .HyperMD-header-1       { color: var(--h1-color) }            实时预览
+ *   .inline-title           { color: var(--inline-title-color) }  文件标题
+ *
+ * 所以只要把自己的七个变量接到核心这几个上就够了，两个视图一起跟上，不用分别
+ * 写规则。文件标题那个变量核心默认是 var(--h1-color)，这里给它单独的值。
+ *
+ * 挂在 body.lt-heading-colors 上，特异度高过主题写在 body / .theme-light /
+ * .theme-dark 上的那份（不少主题会把六个全设成 --text-normal），不必依赖样式表
+ * 的加载顺序。注意有的主题是直接给标题元素写 color、不走这组变量的，那种主题
+ * 下这里盖不住 —— 它自己就带配色，也不需要盖。
+ */
+
+body.lt-heading-colors {
+	--inline-title-color: var(--lt-heading-title);
+
+	--h1-color: var(--lt-heading-1);
+	--h2-color: var(--lt-heading-2);
+	--h3-color: var(--lt-heading-3);
+	--h4-color: var(--lt-heading-4);
+	--h5-color: var(--lt-heading-5);
+	--h6-color: var(--lt-heading-6);
+}
