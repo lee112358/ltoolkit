@@ -2,9 +2,14 @@
  *
  * 作用范围和主题的做法一致：阅读视图 + 编辑器的滚动容器。选择器多带一个
  * body.lt-line-height，特异度高过主题自己那条，所以能盖住 Border 的
- * --line-height-customize，不必依赖样式表的加载顺序。 */
+ * --line-height-customize，不必依赖样式表的加载顺序。
+ *
+ * 编辑器这边写成 > .cm-editor > .cm-scroller 而不是后代选择器：实时预览里的
+ * 表格是个内嵌的小编辑器，里面还有一个 .cm-scroller，核心在它上面写了
+ * line-height: var(--table-line-height)（比正文紧）。后代选择器会连它一起改，
+ * 表格的行距就跟着正文行高一起被撑开，和阅读视图对不上了。 */
 
 body.lt-line-height .markdown-preview-view,
-body.lt-line-height .markdown-source-view.mod-cm6 .cm-scroller {
+body.lt-line-height .markdown-source-view.mod-cm6 > .cm-editor > .cm-scroller {
 	line-height: var(--lt-line-height, 1.6);
 }
