@@ -18,6 +18,7 @@ import { ID as SQUARE_TABS, SquareTabs } from "./square-tabs.js";
 import { ID as SIDEBAR_BACKGROUND, SidebarBackground } from "./sidebar-background.js";
 import { ID as NO_DUPLICATE_TABS, NoDuplicateTabs } from "./no-duplicate-tabs.js";
 import { ID as PREVIEW_TABS, PreviewTabs } from "./preview-tabs.js";
+import { DefaultView, ID as DEFAULT_VIEW } from "./default-view.js";
 import { LineToNote } from "./line-to-note.js";
 import { ToTable } from "./to-table.js";
 import { ToggleTaskList } from "./task-list.js";
@@ -162,6 +163,13 @@ export const FEATURES = [
 				default: true,
 			},
 		],
+	},
+	{
+		id: DEFAULT_VIEW,
+		group: "editor",
+		name: "按默认视图打开笔记",
+		desc: "每次打开笔记都按核心设置里的「默认视图模式」显示，不让上一篇的模式跟过来。Obsidian 的视图模式跟着标签页走，那个默认值只在标签页新建时用一次：把 A 切进编辑视图，再从文件浏览器点开 B，B 也是编辑视图。开着「预览标签页」时格外明显——浏览本来就都在同一个标签页里进行，一旦有一次切进编辑，后面每一篇都成了编辑视图。不记任何东西：标签页只要开着就不会自己换模式，正在写的那篇本来就待在它自己的标签页里。",
+		create: (app, plugin) => new DefaultView(app, plugin),
 	},
 	{
 		id: TOGGLE_BOOKMARK,
