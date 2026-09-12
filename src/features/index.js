@@ -19,6 +19,7 @@ import { ID as SIDEBAR_BACKGROUND, SidebarBackground } from "./sidebar-backgroun
 import { ID as NO_DUPLICATE_TABS, NoDuplicateTabs } from "./no-duplicate-tabs.js";
 import { ID as PREVIEW_TABS, PreviewTabs } from "./preview-tabs.js";
 import { DefaultView, ID as DEFAULT_VIEW } from "./default-view.js";
+import { ID as NAV_HISTORY, NavHistory } from "./nav-history.js";
 import { LineToNote } from "./line-to-note.js";
 import { ToTable } from "./to-table.js";
 import { ToggleTaskList } from "./task-list.js";
@@ -170,6 +171,22 @@ export const FEATURES = [
 		name: "按默认视图打开笔记",
 		desc: "每次打开笔记都按核心设置里的「默认视图模式」显示，不让上一篇的模式跟过来。Obsidian 的视图模式跟着标签页走，那个默认值只在标签页新建时用一次：把 A 切进编辑视图，再从文件浏览器点开 B，B 也是编辑视图。开着「预览标签页」时格外明显——浏览本来就都在同一个标签页里进行，一旦有一次切进编辑，后面每一篇都成了编辑视图。不记任何东西：标签页只要开着就不会自己换模式，正在写的那篇本来就待在它自己的标签页里。",
 		create: (app, plugin) => new DefaultView(app, plugin),
+	},
+	{
+		id: NAV_HISTORY,
+		group: "editor",
+		name: "跨标签页的前进后退",
+		desc: "整个窗口一条浏览轨迹，后退就是回到上一个位置，该切到哪个标签页就切过去。Obsidian 的前进后退是每个标签页各记一份的：在 A 里看完跳到 B 打开新笔记，这时按后退什么也不会发生——B 自己的历史是空的，A 那份 B 看不见。轨迹是一条线，一格一个文件，看到新的一篇就往后添一格，不管它在哪个标签页里——固定标签页 1、2、3 加上在第 4 个标签页里看的 4、5、6，一路后退就是 5、4、3、2、1。回到一格时：这篇正开着就切过去（也就绝不会开出第二份，免得和「同一标签组不重复打开」撞上）；没开着但它上次待的标签页还在，就在那里打开，内置历史的下一条正好是它时交给内置历史，连滚动位置和光标一起恢复；标签页也关掉了就在当前标签页里重新打开它——关标签页不改轨迹，轨迹记的是你看过什么。文件被删掉的格子跳过。鼠标的前进后退键、触控板双指滑动、标签栏左上角那两个箭头默认都走这条轨迹（鼠标键在 Obsidian 的快捷键设置里是绑不上的，那里只认键盘，所以由插件直接接管）。键盘那边另有两条命令，默认不占键——Cmd/Ctrl+[ 和 ] 还挂在内置的前进后退上，要用得自己去快捷键里改挂过来。",
+		create: (app, plugin) => new NavHistory(app, plugin),
+		options: [
+			{
+				key: "takeOver",
+				type: "toggle",
+				name: "接管鼠标键和导航箭头",
+				desc: "鼠标的前进后退键、触控板双指滑动、标签栏左上角的箭头都改走这条跨标签页的轨迹。弹窗和菜单开着的时候仍旧让位给 Obsidian（那时候后退的本意是关掉它们），走不动了也会交回给内置的前进后退。关掉的话就只剩两条命令，得自己绑键。",
+				default: true,
+			},
+		],
 	},
 	{
 		id: TOGGLE_BOOKMARK,

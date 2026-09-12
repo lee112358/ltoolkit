@@ -4,7 +4,7 @@
 
 A bundle of small editing, attachment, and appearance tweaks for [Obsidian](https://obsidian.md).
 
-Every feature is a separate toggle in one settings tab. Twenty-two of the thirty-one are on out of the box — everything under Editor and Attachments, plus seven appearance tweaks. The rest, including anything tied to a specific theme, start off. Features that take parameters show them indented under their own switch, and any commands a feature adds are listed there too, with the hotkey they are currently bound to.
+Every feature is a separate toggle in one settings tab. Twenty-three of the thirty-two are on out of the box — everything under Editor and Attachments, plus seven appearance tweaks. The rest, including anything tied to a specific theme, start off. Features that take parameters show them indented under their own switch, and any commands a feature adds are listed there too, with the hotkey they are currently bound to.
 
 <img src="docs/settings-en.svg" alt="The settings tab: one switch per feature, parameters indented underneath" width="720">
 
@@ -46,6 +46,9 @@ Every feature is a separate toggle in one settings tab. Twenty-two of the thirty
   <br>*Options:* promote on edit.
 
 - **Open notes in the default view** — Every note opens in whatever "Default view for new tabs" is set to in Obsidian's own settings, instead of inheriting the previous note's mode. Obsidian's view mode follows the *tab*, and that default only applies when a tab is created: switch A to editing, then click B in the file explorer, and B is in editing too. It shows up most with Preview tabs, where browsing happens in one tab anyway — one switch to editing and every note after it is in editing. Nothing is stored: a tab keeps its own mode for as long as it's open, and the note you're actually writing already sits in its own tab.
+
+- **Cross-tab back and forward** — One navigation trail for the whole window: Back returns to the previous location and switches to whichever tab it was in. Obsidian keeps *one history per tab*, so finishing in tab A and opening a note in tab B leaves Back doing nothing — B's own history is empty and A's is invisible from there. The trail is one line with one file per slot — every new note you look at appends a slot, wherever it was opened. Pinned tabs 1, 2, 3 plus files 4, 5, 6 browsed in a fourth tab walk back as 5, 4, 3, 2, 1. Returning to a slot: if the file is open, switch to it (so it is never opened twice); if not, but the tab it last lived in is still there, open it there — handing off to the built-in history when its next entry is exactly that file, which restores scroll position and cursor; if that tab is gone too, reopen the file in the current tab. Closing a tab doesn't change the trail — the trail records what you looked at. Slots whose file is gone are skipped. A third command prints the whole trail and the current position to the console. The mouse's back and forward buttons, two-finger swipes, and the arrows at the top left of the tab bar all follow this trail by default — mouse buttons can't be bound in Obsidian's hotkey settings (those are keyboard-only), so the plugin takes them over at the `window.history.back` level, still yielding to Obsidian while a modal or menu is open. The two keyboard commands take no hotkey by default: Cmd/Ctrl+`[` and `]` are still bound to the built-in Back and Forward, so rebind them yourself if you want them.
+  <br>*Options:* take over the mouse buttons and nav arrows.
 
 - **Toggle bookmark** — One command to add or remove the current note's bookmark, with no dialog. Obsidian's built-in *Bookmark* opens a dialog for an alias and a group, and un-bookmarking is a second command. Data still goes into Obsidian's own `bookmarks.json`.
 
