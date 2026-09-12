@@ -1,0 +1,9 @@
+/* 预览标签页的标题画成斜体，和 VS Code 一致 —— 一眼看出这个标签是临时的，
+ * 下一次浏览就会把它顶掉。哪些标签页带上 lt-preview-tab 由 preview-tabs.js 决定。
+ *
+ * 只改字形，不动颜色和粗细：标签栏里已经用底色区分「哪个是活跃的」了，
+ * 再叠一层颜色差异，两种状态混在一起反而看不清。 */
+
+body.lt-preview-tabs .workspace-tab-header.lt-preview-tab .workspace-tab-header-inner-title {
+	font-style: italic;
+}

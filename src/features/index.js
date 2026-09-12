@@ -17,6 +17,7 @@ import { ID as SCROLL_MEMORY, ScrollMemory } from "./scroll-memory.js";
 import { ID as SQUARE_TABS, SquareTabs } from "./square-tabs.js";
 import { ID as SIDEBAR_BACKGROUND, SidebarBackground } from "./sidebar-background.js";
 import { ID as NO_DUPLICATE_TABS, NoDuplicateTabs } from "./no-duplicate-tabs.js";
+import { ID as PREVIEW_TABS, PreviewTabs } from "./preview-tabs.js";
 import { LineToNote } from "./line-to-note.js";
 import { ToTable } from "./to-table.js";
 import { ToggleTaskList } from "./task-list.js";
@@ -144,6 +145,23 @@ export const FEATURES = [
 		name: "同一标签组不重复打开",
 		desc: "已经有标签页开着这个文件时切过去用那个，而不是再开一份。刚打开的那个标签页有历史就退回上一篇，是新建出来的就关掉。只在同一标签组内生效，左右分栏对照看同一篇不受影响。",
 		create: (app, plugin) => new NoDuplicateTabs(app, plugin),
+	},
+	{
+		id: PREVIEW_TABS,
+		group: "editor",
+		name: "预览标签页",
+		desc: "VS Code 式的临时标签页：单击浏览文件时复用同一个标签页（标题画成斜体），浏览多少篇都只占一格；一旦在里面打了字、双击打开，或者把它钉住，标题转成正体，它就固定下来，之后的浏览会另开一个新的预览页而不再覆盖它。Obsidian 默认是「永远复用当前标签页」，不管你是不是正在里面写东西。Cmd/Ctrl+点击、拆分面板这类明说要新开的操作不受影响，侧边栏也不参与。一个标签组里最多一个预览页。",
+		create: (app, plugin) => new PreviewTabs(app, plugin),
+		bodyClass: "lt-preview-tabs",
+		options: [
+			{
+				key: "promoteOnEdit",
+				type: "toggle",
+				name: "编辑即固定",
+				desc: "在预览标签页里打字就把它固定下来。关掉的话只有双击或钉住才固定。",
+				default: true,
+			},
+		],
 	},
 	{
 		id: TOGGLE_BOOKMARK,

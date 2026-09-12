@@ -4,7 +4,7 @@
 
 A bundle of small editing, attachment, and appearance tweaks for [Obsidian](https://obsidian.md).
 
-Every feature is a separate toggle in one settings tab. Twenty of the twenty-nine are on out of the box — everything under Editor and Attachments, plus seven appearance tweaks. The rest, including anything tied to a specific theme, start off. Features that take parameters show them indented under their own switch, and any commands a feature adds are listed there too, with the hotkey they are currently bound to.
+Every feature is a separate toggle in one settings tab. Twenty-one of the thirty are on out of the box — everything under Editor and Attachments, plus seven appearance tweaks. The rest, including anything tied to a specific theme, start off. Features that take parameters show them indented under their own switch, and any commands a feature adds are listed there too, with the hotkey they are currently bound to.
 
 <img src="docs/settings-en.svg" alt="The settings tab: one switch per feature, parameters indented underneath" width="720">
 
@@ -41,6 +41,9 @@ Every feature is a separate toggle in one settings tab. Twenty of the twenty-nin
   <br>*Options:* also restore the cursor and selection · restore delay for long notes.
 
 - **No duplicate tabs** — When a file is already open in the same tab group, switch to that tab instead of opening a second copy. The tab you came from steps back to its previous note, or closes if it was created for this. Only ever within one tab group — split panes comparing the same note are left alone.
+
+- **Preview tabs** — VS Code's ephemeral tab, in Obsidian: single-clicking a file reuses one tab whose title is italic, so browsing through ten notes still costs one tab. Type in it, double-click the file, or pin the tab, and the title turns upright — it is yours now, and the next thing you browse opens in a fresh preview tab beside it instead of overwriting it. Obsidian's own rule is *always* reuse the current tab, whether or not you were writing in it. Anything that explicitly asks for a new tab — Cmd/Ctrl-click, split panes — is left alone, as are the sidebars. One preview tab per tab group at most.
+  <br>*Options:* promote on edit.
 
 - **Toggle bookmark** — One command to add or remove the current note's bookmark, with no dialog. Obsidian's built-in *Bookmark* opens a dialog for an alias and a group, and un-bookmarking is a second command. Data still goes into Obsidian's own `bookmarks.json`.
 
