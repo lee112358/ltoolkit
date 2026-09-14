@@ -323,6 +323,13 @@ export const FEATURES = [
 		enabledByDefault: false,
 	},
 	{
+		id: "metadataDivider",
+		group: "appearance",
+		name: "笔记属性下加分隔线",
+		desc: "笔记属性和正文之间画一条横线。核心把这块的变量都开好了，默认值却是「没有边界」——底色 transparent、边框宽度 0，属性区和正文底色一模一样，看不出属性块到哪儿为止，也就分不清底下那点空当是属性块自己的留白还是源码里真有个空行。线上下留一样多的距离：上面那份是「添加笔记属性」那行到线的距离，下面照抄同一个值，两个视图落到正文上的距离也是同一个数（阅读视图那边还得收掉正文第一块自带的段间距，不然会比编辑视图多出整整一行）。",
+		bodyClass: "lt-metadata-divider",
+	},
+	{
 		id: EDIT_MARKER,
 		group: "appearance",
 		name: "编辑视图左侧竖线",

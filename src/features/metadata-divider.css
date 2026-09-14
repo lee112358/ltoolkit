@@ -1,0 +1,45 @@
+/* 笔记属性和正文之间画条界。
+ *
+ * 核心把这块的变量都开好了，默认值却是「没有边界」：--metadata-background
+ * 是 transparent、--metadata-border-width 是 0，属性区和正文底色完全一样，
+ * 看不出属性块到哪儿为止。
+ *
+ * 线上下留一样多的空当：上面那份是「添加笔记属性」那行到线的距离，下面照抄
+ * 同一个值。两个视图用的是同一个数，改这一处就一起跟上。
+ */
+
+body.lt-metadata-divider {
+	--lt-metadata-gap: var(--size-4-2);
+}
+
+/* ---------- 线，和它上面的空当 ---------- */
+
+body.lt-metadata-divider .metadata-container {
+	border-bottom: var(--border-width) solid var(--background-modifier-border);
+	padding-bottom: var(--lt-metadata-gap);
+	margin-bottom: 0;
+}
+
+/* ---------- 线下面的空当 ---------- */
+
+/* 编辑视图：属性块底下直接就是第一行正文，这份 margin 就是全部距离。 */
+body.lt-metadata-divider .markdown-source-view .metadata-container {
+	margin-bottom: var(--lt-metadata-gap);
+}
+
+/* 阅读视图：属性块包在 .mod-header 里，它自带的下边距先收掉，再补上同一个
+ * 值 —— 这样两个视图落到正文上的距离是同一个数。 */
+body.lt-metadata-divider .markdown-preview-view .mod-header {
+	margin-bottom: 0;
+	padding-bottom: var(--lt-metadata-gap);
+}
+
+/* 正文第一块自己还带一份上边距（--p-spacing），不收掉的话阅读视图这边会比
+ * 编辑视图多出整整一个空行。padding 不参与 margin 折叠，收干净即可。
+ *
+ * 得排在 view-parity.css 后面：那边给标题和各类块重设过 margin，同分时
+ * 靠源码顺序定胜负。 */
+body.lt-metadata-divider .markdown-preview-view .mod-header + div,
+body.lt-metadata-divider .markdown-preview-view .mod-header + div > * {
+	margin-top: 0;
+}
