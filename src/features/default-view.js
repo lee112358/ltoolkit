@@ -8,7 +8,8 @@
  * 开着「预览标签页」时这件事格外明显：浏览本来就都在同一个标签页里进行，
  * 一旦有一次切进编辑，后面浏览的每一篇都成了编辑视图。
  *
- * 所以这里只做一件事：每次打开笔记，把它按回默认视图。
+ * 所以这里只做一件事：每次打开笔记，把它按回默认视图。切走再切回不算打开——
+ * file-open 这个事件在切标签页时也会响，那时候的模式是你自己切的，不能动。
  *
  * 不记任何东西。「这篇我想一直用编辑视图」那种按笔记记忆的做法试过，不值得：
  * 切模式没有对应的工作区事件（Cmd+E 走 MarkdownView.toggleMode，
@@ -27,6 +28,10 @@ export class DefaultView extends Component {
 		super();
 		this.app = app;
 		this.plugin = plugin;
+		/* 每个标签页最近一次套用过默认视图的文件。file-open 在切标签页时也会响，
+		 * 靠它认出「这篇在这个标签页里已经处理过了」。键是 leaf 对象，标签页一关
+		 * 条目自己就没了，不用清。 */
+		this.applied = new WeakMap();
 	}
 
 	onload() {
@@ -38,6 +43,12 @@ export class DefaultView extends Component {
 			// 从侧边栏点开时焦点还在文件浏览器上，取主区域最近活跃的那个才准
 			const view = this.app.workspace.getMostRecentLeaf()?.view;
 			if (view?.getViewType() !== "markdown" || !view.file) return;
+
+			/* 切走再切回来也会走到这里，这时这篇是什么模式是你自己切的，别动它。
+			 * 只有这个标签页换了另一篇笔记才算「打开」。 */
+			const leaf = view.leaf;
+			if (this.applied.get(leaf) === view.file.path) return;
+			this.applied.set(leaf, view.file.path);
 
 			const want = this.defaultMode();
 			if (view.getMode() === want) return; // 新建的标签页本来就是默认视图，不用动
