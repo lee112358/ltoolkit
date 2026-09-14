@@ -93,6 +93,8 @@ export class NavHistory extends Component {
 		this.entries = [];
 		this.index = -1;
 		this.navigatingUntil = 0;
+		/* 走轨迹的那条链，见 go() */
+		this.walking = Promise.resolve();
 	}
 
 	onload() {
@@ -175,7 +177,35 @@ export class NavHistory extends Component {
 
 	/* ── 走轨迹 ─────────────────────────────────────── */
 
-	async go(step) {
+	/* 一次只走一步，排队走。
+	 *
+	 * 调 go() 的三个地方（命令、鼠标前进后退键、标签栏那两个箭头）都不 await 它，
+	 * 所以连按两下就是两次并发：它们会一起写 this.index，而且后一步多半正撞上
+	 * 前一步还在加载。撞上的后果不是报错而是静默作废 —— Obsidian 的 history.go
+	 * 第一行就是
+	 *
+	 *     if (this.owner.working) return new Notice(msgTabBusy()), void 0;
+	 *
+	 * 弹一句「当前标签页正忙，请稍后再试」，什么都不做，返回一个已经 resolve 的
+	 * promise。stepInHistory 看不出区别，于是这一步被当成走成了，index 却已经
+	 * 挪过去 —— 轨迹和你眼前显示的那篇从此错位，后面每一次后退都从错的位置数。
+	 * （openFile 那条路一样：setViewState 一进门也是 if (this.working) return，
+	 * 连提示都没有。）
+	 *
+	 * 串成一条链就没有这个窗口：history.back() / openFile() 的 promise 本来就是
+	 * 等 setViewState 整个跑完才 resolve 的，下一步等到它，标签页必然已经闲了。
+	 * 顺带也不会有两个 go() 同时写 index 了。
+	 *
+	 * catch 挂在链上而不是 walk 里：链上任何一环抛出去而没人接，后面的 .then
+	 * 就全被跳过，前进后退会从此彻底不动 —— 而且悄无声息。 */
+	go(step) {
+		this.walking = this.walking
+			.then(() => this.walk(step))
+			.catch((err) => console.error("[ltoolkit] 前进后退失败", err));
+		return this.walking;
+	}
+
+	async walk(step) {
 		this.navigatingUntil = Date.now() + NAVIGATE_WINDOW;
 		try {
 			/* 文件被删掉的格子跳过继续找。一格都去不成就把 index 放回原处，
@@ -186,8 +216,6 @@ export class NavHistory extends Component {
 				if (await this.show(this.entries[at], step)) return;
 			}
 			this.index = from;
-		} catch (err) {
-			console.error("[ltoolkit] 前进后退失败", err);
 		} finally {
 			// 让这几步触发的 file-open 先走完，再放开记录
 			window.setTimeout(() => (this.navigatingUntil = 0), 0);
