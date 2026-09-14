@@ -1,0 +1,32 @@
+/* 编辑视图的标记 —— 编辑区左边一条竖线，阅读视图没有。
+ *
+ * 两个视图长得越像越难一眼分辨（开着「编辑与阅读视图观感一致」时尤其），
+ * 给编辑视图留一个显式的记号：有线是编辑，没线是阅读。
+ *
+ * 判断用 containerEl 上的 data-mode 属性（"source" 是编辑，含实时预览和源码模式；
+ * "preview" 是阅读）。不能靠 :has(.markdown-source-view) 认元素 —— 核心切模式走
+ * setMode()，里面是把旧视图 hide() 藏起来，两个视图始终都留在 DOM 里，:has() 会
+ * 一直命中。data-mode 正是 setMode() 结尾处更新的，才是随模式走的那个信号。
+ *
+ * 画在 .workspace-leaf-content 的 ::before 上，而不是内容区里面：标题栏
+ * （.view-header，显示文件名那条）是内容区的兄弟节点，画在内容区里线就从
+ * 标题栏底下才开始，上面空一截。这一层从标题栏顶一直包到底，线才是连续的。
+ * 核心给它写了 position: relative，直接绝对定位就行。
+ *
+ * 也不能用 inset box-shadow：标题栏自己有 background-color，会把父层的阴影盖掉。
+ * 同理 z-index 要压过标题栏的 z-index: 1，否则线在标题栏那一段还是会断。
+ *
+ * 颜色由 edit-marker.js 写在 body 上的 --lt-edit-marker-color 决定。 */
+
+body.lt-edit-marker
+	.workspace-leaf-content[data-type="markdown"][data-mode="source"]::before {
+	content: "";
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	width: 2px;
+	background-color: var(--lt-edit-marker-color, #af9af4);
+	z-index: 2;
+	pointer-events: none;
+}

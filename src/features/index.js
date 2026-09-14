@@ -9,6 +9,7 @@ import { BlockEscape, ID as BLOCK_ESCAPE } from "./block-escape.js";
 import { ID as INSERT_LINE, InsertLine } from "./insert-line.js";
 import { ID as FOLDER_LINK, FolderLink } from "./folder-link.js";
 import { ID as LINE_HEIGHT, LineHeight } from "./line-height.js";
+import { ID as EDIT_MARKER, EditMarker } from "./edit-marker.js";
 import { ID as HEADING_COLORS, HeadingColors } from "./heading-colors.js";
 import { ID as VIEW_PARITY, ViewParity } from "./view-parity.js";
 import { ID as PROGRESSIVE_SELECT, ProgressiveSelect } from "./progressive-select.js";
@@ -320,6 +321,24 @@ export const FEATURES = [
 		bodyClass: "lt-view-parity",
 		create: (app) => new ViewParity(app),
 		enabledByDefault: false,
+	},
+	{
+		id: EDIT_MARKER,
+		group: "appearance",
+		name: "编辑视图左侧竖线",
+		desc: "编辑视图的笔记最左边画一条竖线，阅读视图没有 —— 两个视图长得越像越难一眼分辨，开着「编辑与阅读视图观感一致」时尤其。线从标题栏顶一直连到底，不是只贴着正文：判断靠 leaf 上的 data-mode 属性（source 是编辑，含实时预览和源码模式）——两个视图始终都在 DOM 里，切模式只是把旧的那个藏起来，所以不能靠「有没有某个元素」来认。画在整个 leaf 的 ::before 上，所以标题栏那一段也盖得住。",
+		bodyClass: "lt-edit-marker",
+		create: (app, plugin) => new EditMarker(app, plugin),
+		enabledByDefault: false,
+		options: [
+			{
+				key: "color",
+				type: "color",
+				name: "竖线颜色",
+				desc: "默认这个色是 Obsidian 默认强调色在浅色模式下的值。挑过之后就是固定色，不再跟着主题和强调色走；明暗模式共用一个值。",
+				default: "#af9af4",
+			},
+		],
 	},
 	{
 		id: HEADING_COLORS,
