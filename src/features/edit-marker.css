@@ -18,8 +18,7 @@
  *
  * 颜色由 edit-marker.js 写在 body 上的 --lt-edit-marker-color 决定。 */
 
-body.lt-edit-marker
-	.workspace-leaf-content[data-type="markdown"][data-mode="source"]::before {
+body.lt-edit-marker .workspace-leaf-content[data-type="markdown"][data-mode="source"]::before {
 	content: "";
 	position: absolute;
 	top: 0;
