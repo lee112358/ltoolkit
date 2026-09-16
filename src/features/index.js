@@ -19,6 +19,7 @@ import { ID as SQUARE_TABS, SquareTabs } from "./square-tabs.js";
 import { ID as SIDEBAR_BACKGROUND, SidebarBackground } from "./sidebar-background.js";
 import { ID as NO_DUPLICATE_TABS, NoDuplicateTabs } from "./no-duplicate-tabs.js";
 import { ID as PREVIEW_TABS, PreviewTabs } from "./preview-tabs.js";
+import { ID as SIDE_PREVIEW, SidePreview } from "./side-preview.js";
 import { DefaultView, ID as DEFAULT_VIEW } from "./default-view.js";
 import { ID as NAV_HISTORY, NavHistory } from "./nav-history.js";
 import { LineToNote } from "./line-to-note.js";
@@ -139,6 +140,24 @@ export const FEATURES = [
 				desc: "打开笔记后等多久再恢复位置。长笔记渲染慢导致恢复不准时调大它，最大 2000。",
 				default: "100",
 				placeholder: "100",
+			},
+		],
+	},
+	{
+		id: SIDE_PREVIEW,
+		group: "editor",
+		name: "Option 点击在侧栏打开",
+		desc: "按住 Option 点链接、文件树、搜索结果或 Bases 表格里的文件名，固定在同一个侧栏标签页里打开，下次再点还是它 —— 左边清单、右边跟着换，整个窗口始终只有两个标签组。Obsidian 自带的 Option+Cmd+点击是「新建分栏」，点几次就多几个标签组；官方要做到复用得先手动分栏再把左边那个标签页固定住，固定之后左边自己就跳不动了。这个功能把那套行为收进一个修饰键，不用固定任何标签页。侧栏是认领来的：主编辑区里已经有别的标签组就用现成的，只有一个标签组时才劈一刀；侧栏被关掉后下次点击再认领一个。单按 Option 在 Obsidian 里本来不做任何事，不抢别的快捷键；编辑器正文里的 Option+点击多光标也不受影响——只有点在链接和文件项上才走这条路。",
+		create: (app, plugin) => new SidePreview(app, plugin),
+		desktopOnly: true,
+		enabledByDefault: false,
+		options: [
+			{
+				key: "focus",
+				type: "toggle",
+				name: "点击后切到侧栏",
+				desc: "打开后把光标焦点也移到侧栏那一侧。默认关闭 —— 焦点留在原处才能接着点下一行，这是「清单 + 预览」这种看法的重点。",
+				default: false,
 			},
 		],
 	},
