@@ -1,0 +1,44 @@
+/* 软链接文件夹名字右边的小箭头。
+ *
+ * 哪些行是软链接由 symlink-marker.js 判断，它生成的样式只在那些行的
+ * .nav-folder-title 上设 --lt-symlink: inline-block；这里没设就是 none，不画。
+ *
+ * 跟在文字后面走（::after、inline-block），不做绝对定位：箭头要贴着名字，
+ * 名字多长它就在哪儿。颜色、淡度照抄 file-tree-icons.css 里的文件图标 ——
+ * currentColor 加 --icon-opacity，选中、悬停时和文字一起变，明暗主题不另配。
+ * 图形是 Lucide 的 arrow-up-right，「指到别处去」的通用记号。
+ *
+ * 由 features/index.js 里的 bodyClass "lt-symlink-marker" 控制开关。 */
+
+body.lt-symlink-marker
+	.workspace-leaf-content[data-type="file-explorer"]
+	.nav-folder-title-content::after {
+	content: "";
+	display: var(--lt-symlink, none);
+	width: var(--icon-xs);
+	height: var(--icon-xs);
+	margin-inline-start: var(--size-2-2);
+	vertical-align: middle;
+	background-color: currentColor;
+	opacity: var(--icon-opacity);
+	-webkit-mask-image: var(--lt-icon-symlink);
+	mask-image: var(--lt-icon-symlink);
+	-webkit-mask-repeat: no-repeat;
+	mask-repeat: no-repeat;
+	-webkit-mask-position: center;
+	mask-position: center;
+	-webkit-mask-size: contain;
+	mask-size: contain;
+}
+
+/* 重命名时 inner 变成可编辑元素，箭头会混在输入框里，先收起来 */
+body.lt-symlink-marker
+	.workspace-leaf-content[data-type="file-explorer"]
+	.is-being-renamed
+	.nav-folder-title-content::after {
+	display: none;
+}
+
+body.lt-symlink-marker {
+	--lt-icon-symlink: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23fff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M7 7h10v10'/%3E%3Cpath d='M7 17 17 7'/%3E%3C/svg%3E");
+}

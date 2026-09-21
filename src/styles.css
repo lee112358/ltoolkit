@@ -12,6 +12,7 @@
 @import "./features/heading-colors.css";
 @import "./features/hide-explorer-tab-header.css";
 @import "./features/file-tree-icons.css";
+@import "./features/symlink-marker.css";
 @import "./features/folder-link.css";
 @import "./features/link-code-color.css";
 @import "./features/attachment-cleaner.css";

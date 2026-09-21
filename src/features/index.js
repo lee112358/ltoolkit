@@ -16,6 +16,7 @@ import { ID as PROGRESSIVE_SELECT, ProgressiveSelect } from "./progressive-selec
 import { ID as TOGGLE_BOOKMARK, ToggleBookmark } from "./toggle-bookmark.js";
 import { ID as SCROLL_MEMORY, ScrollMemory } from "./scroll-memory.js";
 import { ID as SQUARE_TABS, SquareTabs } from "./square-tabs.js";
+import { ID as SYMLINK_MARKER, SymlinkMarker } from "./symlink-marker.js";
 import { ID as SIDEBAR_BACKGROUND, SidebarBackground } from "./sidebar-background.js";
 import { ID as NO_DUPLICATE_TABS, NoDuplicateTabs } from "./no-duplicate-tabs.js";
 import { ID as PREVIEW_TABS, PreviewTabs } from "./preview-tabs.js";
@@ -471,6 +472,15 @@ export const FEATURES = [
 		name: "文件图标",
 		desc: "给侧边栏文件树里的文件加一个图标。Obsidian 原生给文件夹画了折叠箭头，文件前面却是空的，一列全是文字不好扫。只画文件这一个——文件夹有箭头当标记了，再补一个是重复；也不按扩展名分图标。图标不占位，落在同级文件夹那颗折叠箭头的位置上，所以文件名和文件夹名照旧对齐，不会被图标推着往右挪。颜色跟着文字走，选中和悬停时一起变，明暗主题都不用另配。",
 		bodyClass: "lt-file-tree-icons",
+	},
+	{
+		id: SYMLINK_MARKER,
+		group: "appearance",
+		name: "标出软链接文件夹",
+		desc: "文件树里是软链接的文件夹，名字右边加一个淡色小箭头，鼠标悬停显示它实际指向的位置（家目录缩写成 ~）。Obsidian 顺着软链接把内容读进来，文件夹本身却不留任何记号，和普通文件夹长得一模一样。颜色跟着文字走，选中和悬停时一起变。库里新建、改名、删除文件夹时自动更新；在库外面新建或拆掉软链接，要重开一次这项开关（或重启 Obsidian）才认得出来。手机端查不了底层文件系统，只在桌面端有。",
+		bodyClass: "lt-symlink-marker",
+		create: (app, plugin) => new SymlinkMarker(app, plugin),
+		desktopOnly: true,
 	},
 	{
 		id: "linkCodeColor",
