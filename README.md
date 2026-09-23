@@ -80,6 +80,9 @@ Every feature is a separate toggle in one settings tab. Twenty-four of the thirt
   Obsidian keeps only the first word of the info string, so the name is read back from the source. Works in both views: Reading view gets a header row, and in Live Preview — where Obsidian collapses the fence line while the cursor is elsewhere — the name is filled back in via a CodeMirror line decoration.
   <br>*Options:* also show the language label in Reading view, which normally only Live Preview has (it steps aside on hover so the copy button can take its place).
 
+- **Collapse long code blocks** — In Reading view, a code block taller than N lines shows only its first N — measured as rendered, so a single wrapped line thousands of characters long counts too — fades out at the bottom and gets an *Expand* button (which then turns into *Collapse*). Expanded blocks stay expanded while the file is open — re-renders and trips through Editing view don't reset them — and are forgotten once it's closed. Adding or removing lines above a block also puts it back to collapsed. Live Preview is left alone: its code blocks are painted line by line, with no container whose height could be capped.
+  <br>*Options:* number of lines.
+
 - **Flat code background** — Replaces the Border theme's dotted texture on code blocks, inline code, blockquotes and table headers with a flat fill. *Theme-specific.*
 
 - **Body line height** — A line-height multiplier for both Reading view and the editor. Obsidian has no core setting for this and themes usually leave it to Style Settings; this keeps it with you when you change themes.

@@ -1,0 +1,52 @@
+/* 收起时截的是 code 而不是 pre：pre 里还可能有文件名那一行
+ * （code-block-filename.js 塞的），截 pre 就得把它的高度也算进去。
+ * 1lh 是 code 自己的行高，N 行就是 N 个 1lh，不用关心主题定的字号和行高。
+ *
+ * display: block 两种状态都得有：code 默认是行内元素，行内元素的 scrollHeight
+ * 恒为 0，展开后要是退回行内，measure 会把它判成「不长」，收起按钮跟着藏掉。 */
+body.lt-code-block-fold .markdown-rendered pre.lt-code-fold > code {
+	display: block;
+}
+
+body.lt-code-block-fold .markdown-rendered pre.lt-code-fold:not(.is-expanded) > code {
+	max-height: calc(var(--lt-code-fold-lines, 10) * 1lh);
+	overflow: hidden;
+}
+
+/* 真被截掉了才渐隐。短代码块也挂着上面那条 max-height，但够不着它，没有影响。
+ * 用遮罩做渐隐，不用盖一层渐变色块 —— 那样得知道代码块的底色，
+ * 主题、纯色背景那项功能各有各的底色，猜不准 */
+body.lt-code-block-fold
+	.markdown-rendered
+	pre.lt-code-fold.is-overflowing:not(.is-expanded)
+	> code {
+	-webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - 2lh), transparent);
+	mask-image: linear-gradient(to bottom, #000 calc(100% - 2lh), transparent);
+}
+
+/* 按钮一律建好，量出来够长才露面 */
+body.lt-code-block-fold
+	.markdown-rendered
+	pre.lt-code-fold:not(.is-overflowing)
+	> .lt-code-fold-toggle {
+	display: none;
+}
+
+body.lt-code-block-fold .markdown-rendered pre.lt-code-fold > .lt-code-fold-toggle {
+	margin-top: var(--size-4-2);
+	padding-top: var(--size-2-2);
+	border-top: 1px solid var(--background-modifier-border);
+	color: var(--text-muted);
+	font-family: var(--font-interface);
+	font-size: var(--font-ui-smaller);
+	line-height: var(--line-height-tight);
+	text-align: center;
+	white-space: nowrap;
+	cursor: var(--cursor);
+	/* 框选整个代码块时别把按钮上的字一起选走 */
+	user-select: none;
+}
+
+body.lt-code-block-fold .markdown-rendered pre.lt-code-fold > .lt-code-fold-toggle:hover {
+	color: var(--text-normal);
+}

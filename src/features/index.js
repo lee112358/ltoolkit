@@ -1,6 +1,7 @@
 import { ActiveLine, ID as ACTIVE_LINE } from "./active-line.js";
 import { CodeBlockFilename, ID as CODE_BLOCK_FILENAME } from "./code-block-filename.js";
 import { CodeBlockTop, ID as CODE_BLOCK_TOP } from "./code-block-top.js";
+import { CodeBlockFold, ID as CODE_BLOCK_FOLD } from "./code-block-fold.js";
 import { AttachmentCleaner, ID as ATTACHMENT_CLEANER } from "./attachment-cleaner.js";
 import { AttachmentFolder, ID as ATTACHMENT_FOLDER } from "./attachment-folder.js";
 import { CanvasMouseSwap } from "./canvas-mouse-swap.js";
@@ -304,6 +305,23 @@ export const FEATURES = [
 				name: "阅读视图也显示语言",
 				desc: "右上角那颗语言标签是实时预览才有的，阅读视图这边补一颗，写法和位置都照抄它。鼠标移到代码块上时让位给内置的复制按钮。",
 				default: true,
+			},
+		],
+	},
+	{
+		id: CODE_BLOCK_FOLD,
+		group: "appearance",
+		name: "长代码块默认收起",
+		desc: "阅读视图里高过设定行数的代码块只露出前几行，底部渐隐，点下面的「展开」看全部，展开后可再收起。行数按显示出来的高度算，一行几千字、自动换行铺开的长 prompt 也算长代码块。展开状态只在文件开着期间记住：阅读视图重画、切到编辑模式再切回来都不会丢，关掉文件就忘了；在代码块上方增删几行也会让它回到收起。实时预览不受影响——那边代码块是逐行铺的，没有外层容器可截高度。",
+		bodyClass: "lt-code-block-fold",
+		create: (app, plugin) => new CodeBlockFold(app, plugin),
+		options: [
+			{
+				key: "lines",
+				name: "收起后显示的行数",
+				desc: "显示高度超过这么多行才收起，收起后也露出这么多行。超出 3–100 会被夹到范围内。",
+				default: "10",
+				placeholder: "10",
 			},
 		],
 	},
