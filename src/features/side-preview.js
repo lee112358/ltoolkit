@@ -67,6 +67,20 @@
  * 组正显示的恰好就是你正在点的那个（比如 Base 开在右边），那就在第二个组里
  * 另开一个标签页，免得把清单自己顶掉；之后它是正显示的那个，接着复用。
  *
+ * 例外之二：第二个组正显示的就是你正在点的那篇**笔记**（在右边读着一篇，点
+ * 它里面的引用），那就在这个标签页里原地跳转，跟不按 Option 点一样。清单要
+ * 保住，笔记没什么可保的 —— 右边本来就是「跟着换」的那一侧。
+ *
+ * ── 编辑模式下的链接得自己开 ──────────────────────
+ *
+ * 阅读模式的链接走 click，同步调 openLinkText，上面那套标记直接生效。
+ * 编辑模式（Live Preview）不一样：MarkdownView 的 onEditorClick 挂在
+ * mousedown 上，而且一见 altKey 就整个不管了（Option 留给多光标），链接
+ * 根本不会被打开。所以点在编辑器里的链接上时，在捕获阶段的 mousedown 就
+ * 截住：拦掉多光标，用编辑器自己的 getClickableTokenAt 认出是哪个链接，
+ * 立起标记后调 openLinkText —— 它在第一个 await 之前同步调 getLeaf，
+ * 一样被我们接管。
+ *
  * ── 焦点默认不跟过去 ─────────────────────────────
  *
  * 留在左边才能接着点下一行，这是「清单 + 预览」这种看法的重点。想让焦点跟
@@ -89,6 +103,11 @@ const OPENERS = [
 	".bookmark-item",
 ].join(",");
 
+/* 编辑模式里渲染出来的内部链接文字。同 onEditorClick 的判断：
+ * 得点在 .cm-underline 上，外层是 wikilink 或 markdown 链接 */
+const EDITOR_LINK = ".cm-content .cm-underline";
+const EDITOR_LINK_WRAP = ".cm-hmd-internal-link, .cm-link";
+
 export class SidePreview extends Component {
 	constructor(app, plugin) {
 		super();
@@ -102,23 +121,59 @@ export class SidePreview extends Component {
 
 	onload() {
 		this.registerDomEvent(document, "click", (e) => this.onClick(e), { capture: true });
+		this.registerDomEvent(document, "mousedown", (e) => this.onEditorMouseDown(e), { capture: true });
 		this.app.workspace.onLayoutReady(() => this.patchGetLeaf());
 	}
 
+	isOptionClick(e) {
+		return e.altKey && !e.metaKey && !e.ctrlKey && !e.shiftKey && e.button === 0;
+	}
+
 	onClick(e) {
-		if (!e.altKey || e.metaKey || e.ctrlKey || e.shiftKey) return;
-		if (e.button !== 0) return;
+		if (!this.isOptionClick(e)) return;
 		if (!e.target?.closest?.(OPENERS)) return;
 
+		this.arm(e.target);
+		this.openFromExplorer(e);
+	}
+
+	/* 立起「这一拨走侧栏」的标记。点击的整串处理是同步的，排在这个 0 毫秒之前跑完 */
+	arm(target) {
 		this.routing = true;
-		this.origin = this.app.workspace.activeLeaf ?? null;
-		/* click 的整串处理是同步的，排在这个 0 毫秒之前跑完 */
+		this.origin = this.leafOf(target) ?? this.app.workspace.activeLeaf ?? null;
 		window.setTimeout(() => {
 			this.routing = false;
 			this.origin = null;
 		}, 0);
+	}
 
-		this.openFromExplorer(e);
+	/* 点的东西在哪个标签页里。不看 activeLeaf：没点进右边就直接点它里面的
+	 * 链接时，活跃的还是左边 */
+	leafOf(el) {
+		let found = null;
+		this.app.workspace.iterateAllLeaves((leaf) => {
+			if (!found && leaf.view?.containerEl?.contains(el)) found = leaf;
+		});
+		return found;
+	}
+
+	/* 编辑模式下的链接，见文件头 */
+	onEditorMouseDown(e) {
+		if (!this.isOptionClick(e)) return;
+		const target = e.target;
+		if (!target?.closest?.(EDITOR_LINK) || !target.closest(EDITOR_LINK_WRAP)) return;
+
+		const leaf = this.leafOf(target);
+		const view = leaf?.view;
+		const editor = view?.editor;
+		if (!editor?.getClickableTokenAt || !view.file) return;
+		const token = editor.getClickableTokenAt(editor.posAtMouse(e));
+		if (token?.type !== "internal-link") return;
+
+		e.preventDefault();
+		e.stopPropagation();
+		this.arm(target);
+		this.app.workspace.openLinkText(token.text, view.file.path, false);
 	}
 
 	/* 文件树的 Option+点击是多选，见文件头。拦下它，自己开 */
@@ -175,7 +230,11 @@ export class SidePreview extends Component {
 		if (!group) return this.split();
 
 		const shown = group.children?.[group.currentTab];
-		if (shown && shown !== this.origin && !shown.pinned) return shown;
+		if (shown && !shown.pinned) {
+			if (shown !== this.origin) return shown;
+			/* 在右边读着的笔记里点引用：原地跳，跟不按 Option 一样 */
+			if (shown.view?.getViewType?.() === "markdown") return shown;
+		}
 
 		/* 正显示的是清单自己或被固定了：在第二个组里另开一个并切到前面，
 		 * 否则 openFile 开进去也还是被挡在后面 */
