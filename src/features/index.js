@@ -22,6 +22,7 @@ import { ID as SIDEBAR_BACKGROUND, SidebarBackground } from "./sidebar-backgroun
 import { ID as NO_DUPLICATE_TABS, NoDuplicateTabs } from "./no-duplicate-tabs.js";
 import { ID as PREVIEW_TABS, PreviewTabs } from "./preview-tabs.js";
 import { ID as SIDE_PREVIEW, SidePreview } from "./side-preview.js";
+import { FolderWheel, ID as FOLDER_WHEEL } from "./folder-wheel.js";
 import { DefaultView, ID as DEFAULT_VIEW } from "./default-view.js";
 import { ID as NAV_HISTORY, NavHistory } from "./nav-history.js";
 import { LineToNote } from "./line-to-note.js";
@@ -162,6 +163,15 @@ export const FEATURES = [
 				default: false,
 			},
 		],
+	},
+	{
+		id: FOLDER_WHEEL,
+		group: "editor",
+		name: "Option 滚轮翻同文件夹笔记",
+		desc: "鼠标停在一个标签页上，按住 Option 滚动滚轮，就在这篇所在的文件夹里翻上一篇 / 下一篇，还是在这个标签页里。顺序跟文件树的排序一致（按名字、修改时间或创建时间），只翻和当前这篇同类型的文件，到头就停，左边文件树的高亮跟着挪过去。适合一天一篇的流水账：不用回文件树一行行点。触控板轻扫一下翻一篇，一直滚就一篇一篇往下走。",
+		create: (app, plugin) => new FolderWheel(app, plugin),
+		desktopOnly: true,
+		enabledByDefault: false,
 	},
 	{
 		id: NO_DUPLICATE_TABS,
