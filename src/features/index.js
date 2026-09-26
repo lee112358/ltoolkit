@@ -25,6 +25,7 @@ import { ID as SIDE_PREVIEW, SidePreview } from "./side-preview.js";
 import { FolderWheel, ID as FOLDER_WHEEL } from "./folder-wheel.js";
 import { DefaultView, ID as DEFAULT_VIEW } from "./default-view.js";
 import { ID as NAV_HISTORY, NavHistory } from "./nav-history.js";
+import { ID as QUICK_OPEN, QuickOpen } from "./quick-open.js";
 import { LineToNote } from "./line-to-note.js";
 import { ToTable } from "./to-table.js";
 import { ToggleTaskList } from "./task-list.js";
@@ -217,6 +218,22 @@ export const FEATURES = [
 				name: "接管鼠标键和导航箭头",
 				desc: "鼠标的前进后退键、触控板双指滑动、标签栏左上角的箭头都改走这条跨标签页的轨迹。弹窗和菜单开着的时候仍旧让位给 Obsidian（那时候后退的本意是关掉它们），走不动了也会交回给内置的前进后退。关掉的话就只剩两条命令，得自己绑键。",
 				default: true,
+			},
+		],
+	},
+	{
+		id: QUICK_OPEN,
+		group: "editor",
+		name: "打开和新建分开",
+		desc: "内置快速切换搜不到时回车就是新建，Shift+回车不管搜没搜到都新建，手一快就在错的目录里多出一个空文件。这里拆成两条命令：「快速打开（不新建）」只列已有的文件，回车只会打开，搜不到就什么也不发生，Cmd+回车新标签页、Cmd+Option+回车分栏照旧；「新建笔记（输入路径）」输入框里直接写路径，打开时已经预填好当前笔记所在的目录，直接敲名字就建在这里；下面列出匹配的目录，Tab 把选中的目录补进来、末尾带上 /，接着写名字；第一行实时显示要建的完整路径，回车才新建。路径里的目录不存在会逐级建出来，同名笔记已经在了就直接打开它。两条命令都不占键，要把 Cmd+P 从内置的「快速切换：打开」改挂到「快速打开」上。",
+		create: (app, plugin) => new QuickOpen(app, plugin),
+		options: [
+			{
+				key: "attachments",
+				type: "toggle",
+				name: "包含附件",
+				desc: "除了笔记、画布和 Bases，也列出图片、PDF 等附件。",
+				default: false,
 			},
 		],
 	},
