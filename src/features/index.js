@@ -535,6 +535,13 @@ export const FEATURES = [
 		bodyClass: "lt-link-code-color",
 	},
 	{
+		id: "folderOverviewStyle",
+		group: "appearance",
+		name: "文件夹概览像正文链接",
+		desc: "Folder Notes 插件的文件夹概览选 explorer（树状）样式时，直接套用侧边栏文件树的样子：字号比正文小一号，名字是普通文字色，放在笔记里不像能点的链接，和 list 样式的链接色也对不上。开着这项就把名字放大到 h5 的字号、用链接色，行距收紧，文件夹名加粗以示层级；顶层条目和正文左边对齐，文件夹的折叠箭头挂在左边距里，子层级照旧缩进。只改概览，侧边栏文件树不受影响。",
+		bodyClass: "lt-folder-overview-style",
+	},
+	{
 		id: "hideExplorerTabHeader",
 		group: "appearance",
 		name: "隐藏文件浏览器的标签栏",

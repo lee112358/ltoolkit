@@ -15,6 +15,7 @@
 @import "./features/symlink-marker.css";
 @import "./features/folder-link.css";
 @import "./features/link-code-color.css";
+@import "./features/folder-overview-style.css";
 @import "./features/attachment-cleaner.css";
 @import "./features/sidebar-background.css";
 @import "./features/active-line.css";

@@ -1,0 +1,44 @@
+/* Folder Notes 插件的文件夹概览（```folder-overview 代码块）在 explorer 样式下像正文里的链接。
+ *
+ * explorer 样式是把侧边栏文件树的 .nav-files-container 克隆一份塞进笔记，长得也和侧边栏
+ * 一样：字号是 --nav-item-size，比正文小；名字是普通文字色，不像能点的链接，和同一个
+ * 概览的 list 样式（链接色）也对不上；容器自带左右内边距，每行前面还给折叠箭头留了
+ * 24px（--nav-item-padding），整块比正文往右缩进一截，和上下的标题、代码块对不齐。
+ *
+ * 这里把名字放大到 h5 的字号、用链接色，文件夹名加粗以示层级；行距收紧到侧边栏的
+ * 一半左右，一列链接读起来是一块整体；顶层条目去掉左侧留白，名字和正文左边对齐，
+ * 文件夹的折叠箭头本来就是绝对定位、往左偏 20px，于是挂在左边距里；子层级恢复原来的
+ * 24px，靠缩进和竖线看出层次。只作用于概览容器 .folder-overview 里面，侧边栏文件树
+ * 不受影响。
+ *
+ * 由 features/index.js 里的 bodyClass "lt-folder-overview-style" 控制开关。 */
+
+body.lt-folder-overview-style .folder-overview .nav-files-container {
+	padding-inline: 0;
+}
+
+body.lt-folder-overview-style .folder-overview .tree-item-self {
+	padding-inline-start: 0;
+	padding-block: var(--size-2-1);
+	margin-bottom: 0;
+	font-size: var(--h5-size);
+	line-height: 1.2;
+}
+
+body.lt-folder-overview-style .folder-overview .tree-item-children .tree-item-self {
+	padding-inline-start: var(--size-4-6);
+}
+
+body.lt-folder-overview-style .folder-overview .nav-file-title-content,
+body.lt-folder-overview-style .folder-overview .nav-folder-title-content {
+	color: var(--link-color);
+}
+
+body.lt-folder-overview-style .folder-overview .nav-folder-title-content {
+	font-weight: var(--font-semibold);
+}
+
+body.lt-folder-overview-style .folder-overview .nav-file-title:hover .nav-file-title-content {
+	color: var(--link-color-hover);
+	text-decoration: underline;
+}
