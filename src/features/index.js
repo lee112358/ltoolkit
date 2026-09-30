@@ -15,6 +15,7 @@ import { ID as HEADING_COLORS, HeadingColors } from "./heading-colors.js";
 import { ID as VIEW_PARITY, ViewParity } from "./view-parity.js";
 import { ID as PROGRESSIVE_SELECT, ProgressiveSelect } from "./progressive-select.js";
 import { ID as TOGGLE_BOOKMARK, ToggleBookmark } from "./toggle-bookmark.js";
+import { BookmarkFolderExpand, ID as BOOKMARK_FOLDER_EXPAND } from "./bookmark-folder-expand.js";
 import { ID as SCROLL_MEMORY, ScrollMemory } from "./scroll-memory.js";
 import { ID as SQUARE_TABS, SquareTabs } from "./square-tabs.js";
 import { ID as SYMLINK_MARKER, SymlinkMarker } from "./symlink-marker.js";
@@ -243,6 +244,13 @@ export const FEATURES = [
 		name: "切换书签（当前笔记）",
 		desc: "一条命令加/取消当前笔记的书签，不弹窗。内置的「添加书签」会弹窗让你填别名和分组，取消书签还是另一条命令；不需要分组的话这一条就够，绑个快捷键即可。数据仍然写进 Obsidian 官方的 .obsidian/bookmarks.json。",
 		create: (app, plugin) => new ToggleBookmark(app, plugin),
+	},
+	{
+		id: BOOKMARK_FOLDER_EXPAND,
+		group: "editor",
+		name: "点文件夹书签时展开",
+		desc: "在书签面板里点一个文件夹书签，内置只会在文件树里定位到它，文件夹自己还是收着的。这里顺带把它和它的一级子文件夹展开，里面有什么一眼就能看到；再深的层级不动，免得文件树拉得太长。",
+		create: (app, plugin) => new BookmarkFolderExpand(app, plugin),
 	},
 	{
 		id: SIDEBAR_BACKGROUND,
